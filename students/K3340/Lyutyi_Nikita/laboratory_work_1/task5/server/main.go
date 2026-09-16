@@ -227,7 +227,7 @@ func handlePost(conn net.Conn, request *Request) {
 			conn,
 			"400 Bad Request",
 			"text/plain; charset=utf-8",
-			"Grade must be an integer from 1 to 5",
+			"Grade must be an integer from 2 to 5",
 			nil,
 		)
 		return
