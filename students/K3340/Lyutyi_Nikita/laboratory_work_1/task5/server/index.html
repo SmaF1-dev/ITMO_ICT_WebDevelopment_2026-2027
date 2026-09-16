@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Grade Journal</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 40px auto;
+        }
+
+        form {
+            margin-bottom: 30px;
+        }
+
+        input {
+            padding: 8px;
+            margin-right: 10px;
+        }
+
+        button {
+            padding: 8px 16px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th,
+        td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background: #eee;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>Grade Journal</h1>
+
+<h2>Add grade</h2>
+
+<form method="POST" action="/grades">
+    <label>
+        Subject:
+        <input
+            type="text"
+            name="subject"
+            required
+        >
+    </label>
+
+    <label>
+        Grade:
+        <input
+            type="number"
+            name="grade"
+            min="1"
+            max="5"
+            required
+        >
+    </label>
+
+    <button type="submit">
+        Add
+    </button>
+</form>
+
+<h2>All grades</h2>
+
+{{if .Grades}}
+
+<table>
+    <tr>
+        <th>Subject</th>
+        <th>Grades</th>
+    </tr>
+
+    {{range $subject, $grades := .Grades}}
+    <tr>
+        <td>{{$subject}}</td>
+
+        <td>
+            {{range $grade := $grades}}
+                {{$grade}}
+            {{end}}
+        </td>
+    </tr>
+    {{end}}
+</table>
+
+{{else}}
+
+<p>No grades yet.</p>
+
+{{end}}
+
+</body>
+</html>
