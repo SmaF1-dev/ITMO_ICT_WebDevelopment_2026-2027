@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}Вход{% endblock %}
+
+{% block content %}
+
+<header class="page-header">
+    <p class="eyebrow">Учётная запись</p>
+    <h1>Вход</h1>
+    <p>Войдите в свою учётную запись.</p>
+</header>
+
+<section class="card form-card auth-card">
+    <form
+        method="post"
+        action="{% url 'accounts:login' %}"
+    >
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+            <div class="form-error">
+                {{ form.non_field_errors }}
+            </div>
+        {% endif %}
+
+        {% for field in form %}
+            <div class="auth-field">
+                <label for="{{ field.id_for_label }}">
+                    {{ field.label }}
+                </label>
+
+                {{ field }}
+
+                {% if field.errors %}
+                    <div class="field-errors">
+                        {{ field.errors }}
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+
+        {% if next %}
+            <input
+                type="hidden"
+                name="next"
+                value="{{ next }}"
+            >
+        {% endif %}
+
+        <button class="button" type="submit">
+            Войти
+        </button>
+    </form>
+
+    <p class="auth-footer">
+        Нет аккаунта?
+
+        <a href="{% url 'accounts:register' %}">
+            Зарегистрироваться
+        </a>
+    </p>
+</section>
+
+{% endblock %}

@@ -1,0 +1,96 @@
+/* Навигация пользователя */
+
+.nav-account {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.nav-account form {
+    margin: 0;
+}
+
+.user-name {
+    font-weight: 600;
+    color: #334155;
+}
+
+.logout-button {
+    border: none;
+    background: transparent;
+    color: #2563eb;
+    font: inherit;
+    cursor: pointer;
+    padding: 0;
+}
+
+.logout-button:hover {
+    text-decoration: underline;
+}
+
+
+/* Страницы входа и регистрации */
+
+.auth-card {
+    max-width: 520px;
+}
+
+.auth-field {
+    margin-bottom: 20px;
+}
+
+.auth-field label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+}
+
+.auth-field input {
+    display: block;
+    width: 100%;
+    padding: 10px 12px;
+
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+
+    background: #ffffff;
+    font: inherit;
+}
+
+.auth-field input:focus {
+    outline: 2px solid #93c5fd;
+    border-color: #2563eb;
+}
+
+.field-help {
+    margin: 6px 0 0;
+    font-size: 13px;
+    color: #64748b;
+}
+
+.field-errors,
+.form-error {
+    color: #b91c1c;
+    font-size: 14px;
+}
+
+.form-error {
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+    background: #fef2f2;
+}
+
+.auth-footer {
+    margin-top: 24px;
+    color: #64748b;
+}
+
+@media (max-width: 600px) {
+    .nav-account {
+        width: 100%;
+        justify-content: flex-start;
+    }
+}

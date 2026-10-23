@@ -61,7 +61,7 @@ ROOT_URLCONF = "django_project_lyutyi.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -128,3 +128,7 @@ STATIC_URL = "/static/"
 
 # Тип ключей моделей по умолчанию
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# Аутентификация
+LOGIN_URL = "accounts:login"
+LOGIN_REDIRECT_URL = "project_first_app:car_list"
