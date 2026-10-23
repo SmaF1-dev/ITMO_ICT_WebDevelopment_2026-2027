@@ -33,6 +33,11 @@ urlpatterns = [
         views.owner_create,
         name="owner_create",
     ),
+    path(
+        "owners/users/new/",
+        views.owner_user_create,
+        name="owner_user_create",
+    ),
 
     # Cars — CBV
     path(

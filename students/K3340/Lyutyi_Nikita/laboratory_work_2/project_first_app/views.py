@@ -1,4 +1,5 @@
 from django.contrib.admin.views.decorators import staff_member_required
+from django.db import transaction
 from django.db.models import Count
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
@@ -10,17 +11,25 @@ from django.views.generic import (
     UpdateView,
 )
 
-from .forms import CarForm, CarOwnerForm
+from .forms import (
+    CarForm,
+    CarOwnerForm,
+    OwnerUserCreationForm,
+)
 from .models import Car, CarOwner, DriverLicense
 
 
 # Function-Based Views
 
 def owner_list(request):
-    """Список владельцев с количеством автомобилей."""
+    """Список владельцев и связанных учётных записей."""
 
-    owners = CarOwner.objects.annotate(
-        car_count=Count("cars", distinct=True)
+    owners = (
+        CarOwner.objects
+        .select_related("user")
+        .annotate(
+            car_count=Count("cars", distinct=True)
+        )
     )
 
     return render(
@@ -31,9 +40,12 @@ def owner_list(request):
 
 
 def owner_detail(request, owner_id):
-    """Подробная информация о владельце автомобиля."""
+    """Информация о владельце и его учётной записи."""
 
-    owner = get_object_or_404(CarOwner, pk=owner_id)
+    owner = get_object_or_404(
+        CarOwner.objects.select_related("user"),
+        pk=owner_id,
+    )
 
     ownerships = owner.ownerships.select_related("car").all()
 
@@ -56,21 +68,55 @@ def owner_detail(request, owner_id):
 
 @staff_member_required
 def owner_create(request):
-    """Создание владельца с помощью FBV и ModelForm."""
+    """Создание владельца через ModelForm из практики 2.2."""
 
     if request.method == "POST":
         form = CarOwnerForm(request.POST)
 
         if form.is_valid():
             form.save()
-            return redirect("project_first_app:owner_list")
 
+            return redirect(
+                "project_first_app:owner_list"
+            )
     else:
         form = CarOwnerForm()
 
     return render(
         request,
         "project_first_app/owner_form.html",
+        {"form": form},
+    )
+
+
+@staff_member_required
+def owner_user_create(request):
+    """Создание пользователя и связанного владельца."""
+
+    if request.method == "POST":
+        form = OwnerUserCreationForm(request.POST)
+
+        if form.is_valid():
+            with transaction.atomic():
+                user = form.save()
+
+                owner = CarOwner.objects.create(
+                    user=user,
+                    first_name=user.first_name,
+                    last_name=user.last_name,
+                    birth_date=form.cleaned_data["birth_date"],
+                )
+
+            return redirect(
+                "project_first_app:owner_detail",
+                owner_id=owner.pk,
+            )
+    else:
+        form = OwnerUserCreationForm()
+
+    return render(
+        request,
+        "project_first_app/owner_user_form.html",
         {"form": form},
     )
 
@@ -105,7 +151,7 @@ class CarDetailView(DetailView):
 
 
 class CarCreateView(CreateView):
-    """Создание нового автомобиля."""
+    """Создание автомобиля."""
 
     model = Car
     form_class = CarForm
@@ -117,7 +163,7 @@ class CarCreateView(CreateView):
 
 
 class CarUpdateView(UpdateView):
-    """Редактирование существующего автомобиля."""
+    """Редактирование автомобиля."""
 
     model = Car
     form_class = CarForm
@@ -129,7 +175,7 @@ class CarUpdateView(UpdateView):
 
 
 class CarDeleteView(DeleteView):
-    """Удаление автомобиля с подтверждением."""
+    """Удаление автомобиля."""
 
     model = Car
 

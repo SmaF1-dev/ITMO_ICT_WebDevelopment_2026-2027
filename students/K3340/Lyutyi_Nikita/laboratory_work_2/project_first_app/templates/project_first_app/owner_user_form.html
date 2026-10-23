@@ -1,0 +1,61 @@
+{% extends "project_first_app/base.html" %}
+
+{% block title %}Создание пользователя{% endblock %}
+
+{% block content %}
+
+<header class="page-header">
+    <p class="eyebrow">Практическая работа 2.3</p>
+    <h1>Создание пользователя</h1>
+    <p>
+        Создание учётной записи Django
+        и связанного профиля владельца автомобиля.
+    </p>
+</header>
+
+<section class="card form-card">
+
+    {% if form.errors %}
+        <div role="alert" style="
+            padding: 16px;
+            margin-bottom: 24px;
+            border: 1px solid #f87171;
+            border-radius: 8px;
+            background: #fef2f2;
+            color: #991b1b;
+        ">
+            <strong>Не удалось создать пользователя.</strong>
+            <p>Исправьте следующие ошибки:</p>
+
+            <ul>
+                {% for field in form %}
+                    {% for error in field.errors %}
+                        <li>{{ field.label }}: {{ error }}</li>
+                    {% endfor %}
+                {% endfor %}
+
+                {% for error in form.non_field_errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+
+        {{ form.as_p }}
+
+        <div class="form-actions">
+            <button class="button" type="submit">
+                Создать пользователя
+            </button>
+
+            <a href="{% url 'project_first_app:owner_list' %}">
+                Отмена
+            </a>
+        </div>
+    </form>
+</section>
+
+{% endblock %}

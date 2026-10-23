@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Q
@@ -5,6 +6,15 @@ from django.db.models import Q
 
 class CarOwner(models.Model):
     """Владелец автомобиля."""
+
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="car_owner_profile",
+        verbose_name="Учётная запись",
+    )
 
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
@@ -119,7 +129,6 @@ class Ownership(models.Model):
     def clean(self):
         super().clean()
 
-        # Окончание владения не может быть раньше начала.
         if self.start_date and self.end_date:
             if self.end_date < self.start_date:
                 raise ValidationError({
@@ -128,8 +137,6 @@ class Ownership(models.Model):
                     )
                 })
 
-        # Проверять пересечения можно только для известного
-        # автомобиля и заполненной начальной даты.
         if not self.car_id or not self.start_date:
             return
 

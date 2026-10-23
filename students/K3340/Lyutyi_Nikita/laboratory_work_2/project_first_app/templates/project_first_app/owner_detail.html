@@ -5,7 +5,7 @@
 {% block content %}
 
 <header class="page-header">
-    <p class="eyebrow">Практическая работа 2.1</p>
+    <p class="eyebrow">Практическая работа 2.3</p>
     <h1>{{ owner }}</h1>
     <p>Информация о владельце автомобиля.</p>
 </header>
@@ -35,6 +35,39 @@
 </section>
 
 <section class="card">
+    <h2>Учётная запись</h2>
+
+    {% if owner.user %}
+        <dl class="details">
+            <dt>Логин</dt>
+            <dd>{{ owner.user.username }}</dd>
+
+            {% if user.is_staff or user == owner.user %}
+                <dt>Номер паспорта</dt>
+                <dd>
+                    {{ owner.user.passport_number|default:"Не указан" }}
+                </dd>
+
+                <dt>Домашний адрес</dt>
+                <dd>
+                    {{ owner.user.home_address|default:"Не указан" }}
+                </dd>
+
+                <dt>Национальность</dt>
+                <dd>
+                    {{ owner.user.nationality|default:"Не указана" }}
+                </dd>
+            {% endif %}
+        </dl>
+    {% else %}
+        <p class="muted">
+            Учётная запись Django ещё не привязана
+            к этому владельцу.
+        </p>
+    {% endif %}
+</section>
+
+<section class="card">
     <h2>Водительское удостоверение</h2>
 
     {% if driver_license %}
@@ -49,7 +82,9 @@
             <dd>{{ driver_license.expiry_date|date:"d.m.Y" }}</dd>
         </dl>
     {% else %}
-        <p class="muted">Удостоверение не указано.</p>
+        <p class="muted">
+            Удостоверение не указано.
+        </p>
     {% endif %}
 </section>
 
@@ -75,7 +110,9 @@
                             </a>
                         </td>
 
-                        <td>{{ ownership.start_date|date:"d.m.Y" }}</td>
+                        <td>
+                            {{ ownership.start_date|date:"d.m.Y" }}
+                        </td>
 
                         <td>
                             {% if ownership.end_date %}
@@ -87,7 +124,9 @@
                     </tr>
                 {% empty %}
                     <tr>
-                        <td colspan="3">Записей пока нет.</td>
+                        <td colspan="3">
+                            Записей пока нет.
+                        </td>
                     </tr>
                 {% endfor %}
             </tbody>
@@ -95,7 +134,8 @@
     </div>
 </section>
 
-<a class="back-link" href="{% url 'project_first_app:owner_list' %}">
+<a class="back-link"
+   href="{% url 'project_first_app:owner_list' %}">
     ← К списку владельцев
 </a>
 

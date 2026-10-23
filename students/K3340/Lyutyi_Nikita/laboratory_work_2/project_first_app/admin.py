@@ -12,15 +12,20 @@ class CarOwnerAdmin(admin.ModelAdmin):
         "first_name",
         "last_name",
         "birth_date",
+        "user",
     )
 
     search_fields = (
         "first_name",
         "last_name",
+        "user__username",
     )
 
-    ordering = ("last_name", "first_name")
+    autocomplete_fields = ("user",)
 
+    list_select_related = ("user",)
+
+    ordering = ("last_name", "first_name")
     list_per_page = 20
 
 
@@ -45,12 +50,10 @@ class DriverLicenseAdmin(admin.ModelAdmin):
 
 
 class OwnershipInline(admin.TabularInline):
-    """История владения непосредственно на странице автомобиля."""
+    """История владения на странице автомобиля."""
 
     model = Ownership
-
     extra = 0
-
     autocomplete_fields = ("owner",)
 
     fields = (
@@ -79,9 +82,7 @@ class CarAdmin(admin.ModelAdmin):
     )
 
     list_filter = ("color",)
-
     inlines = (OwnershipInline,)
-
     list_per_page = 20
 
 
@@ -107,7 +108,6 @@ class OwnershipAdmin(admin.ModelAdmin):
     list_filter = ("start_date", "end_date")
 
     autocomplete_fields = ("car", "owner")
-
     list_select_related = ("car", "owner")
 
     list_per_page = 20

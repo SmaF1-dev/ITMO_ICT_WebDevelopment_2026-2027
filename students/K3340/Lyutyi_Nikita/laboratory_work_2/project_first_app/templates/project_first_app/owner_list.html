@@ -5,7 +5,7 @@
 {% block content %}
 
 <header class="page-header">
-    <p class="eyebrow">Практическая работа 2.2</p>
+    <p class="eyebrow">Практическая работа 2.3</p>
     <h1>Владельцы автомобилей</h1>
     <p>Список зарегистрированных владельцев.</p>
 </header>
@@ -15,10 +15,17 @@
         <h2>Все владельцы</h2>
 
         {% if user.is_staff %}
-            <a class="button"
-               href="{% url 'project_first_app:owner_create' %}">
-                Добавить владельца
-            </a>
+            <div class="actions">
+                <a class="button"
+                   href="{% url 'project_first_app:owner_create' %}">
+                    Добавить владельца
+                </a>
+
+                <a class="button"
+                   href="{% url 'project_first_app:owner_user_create' %}">
+                    Создать пользователя
+                </a>
+            </div>
         {% endif %}
     </div>
 
@@ -28,6 +35,7 @@
                 <tr>
                     <th>ID</th>
                     <th>Владелец</th>
+                    <th>Логин</th>
                     <th>Дата рождения</th>
                     <th>Автомобилей</th>
                     <th>Действия</th>
@@ -40,6 +48,14 @@
                         <td>{{ owner.id }}</td>
 
                         <td>{{ owner }}</td>
+
+                        <td>
+                            {% if owner.user %}
+                                {{ owner.user.username }}
+                            {% else %}
+                                Не привязан
+                            {% endif %}
+                        </td>
 
                         <td>
                             {% if owner.birth_date %}
@@ -59,7 +75,7 @@
                     </tr>
                 {% empty %}
                     <tr>
-                        <td colspan="5">
+                        <td colspan="6">
                             Владельцев пока нет.
                         </td>
                     </tr>
