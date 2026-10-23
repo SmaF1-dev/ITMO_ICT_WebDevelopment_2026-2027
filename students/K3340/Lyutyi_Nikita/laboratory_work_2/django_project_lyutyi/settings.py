@@ -37,6 +37,7 @@ INSTALLED_APPS = [
 
     "accounts",
     "project_first_app",
+    "flights",
 ]
 
 
