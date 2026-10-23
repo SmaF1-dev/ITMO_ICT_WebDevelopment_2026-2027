@@ -1,0 +1,63 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>{% block title %}Табло авиарейсов{% endblock %}</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ static('flights/css/flights.css') }}"
+    >
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-inner">
+            <a class="logo" href="{{ url('flights:flight_list') }}">
+                <span class="logo-icon">✈</span>
+                FlightBoard
+            </a>
+
+            <nav class="navigation" aria-label="Основная навигация">
+                <a href="{{ url('flights:flight_list') }}">Рейсы</a>
+                <a href="{{ url('project_first_app:car_list') }}">
+                    Автомобили
+                </a>
+                <a href="{{ url('project_first_app:owner_list') }}">
+                    Владельцы
+                </a>
+            </nav>
+
+            <div class="account-menu">
+                {% if request.user.is_authenticated %}
+                    <span class="account-name">
+                        {{ request.user.username }}
+                    </span>
+
+                    <form method="post" action="{{ url('accounts:logout') }}">
+                        {{ csrf_input }}
+                        <button class="logout-button" type="submit">
+                            Выйти
+                        </button>
+                    </form>
+                {% else %}
+                    <a href="{{ url('accounts:login') }}">Войти</a>
+                    <a class="login-link" href="{{ url('accounts:register') }}">
+                        Регистрация
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+
+    <main class="page-container">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+        Учебный проект · ИТМО · Веб-программирование
+    </footer>
+</body>
+</html>

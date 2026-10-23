@@ -1,0 +1,105 @@
+
+{% extends "flights/base.jinja" %}
+
+{% block title %}
+    {{ flight.flight_number }} — Информация о рейсе
+{% endblock %}
+
+{% block content %}
+
+<a class="back-link" href="{{ url('flights:flight_list') }}">
+    ← Назад к табло
+</a>
+
+<section class="page-heading detail-heading">
+    <div>
+        <p class="eyebrow">Подробная информация</p>
+        <h1>Рейс {{ flight.flight_number }}</h1>
+        <p class="subtitle">{{ flight.airline }}</p>
+    </div>
+
+    {% if flight.departure_time < now %}
+        <span class="status status-past">
+            Время отправления прошло
+        </span>
+    {% elif flight.flight_type == "departure" %}
+        <span class="status status-departure">
+            Отправление
+        </span>
+    {% else %}
+        <span class="status status-arrival">
+            Прибытие
+        </span>
+    {% endif %}
+</section>
+
+<section class="panel">
+    <div class="route-overview">
+        <div class="route-point">
+            <span class="route-label">Откуда</span>
+            <strong>{{ flight.departure_airport }}</strong>
+            <span>{{ datetime_local(flight.departure_time) }}</span>
+        </div>
+
+        <div class="route-divider">✈</div>
+
+        <div class="route-point">
+            <span class="route-label">Куда</span>
+            <strong>{{ flight.arrival_airport }}</strong>
+            <span>{{ datetime_local(flight.arrival_time) }}</span>
+        </div>
+    </div>
+</section>
+
+<div class="details-grid">
+    <section class="panel">
+        <h2>Информация о рейсе</h2>
+
+        <dl class="flight-details">
+            <dt>Номер рейса</dt>
+            <dd>{{ flight.flight_number }}</dd>
+
+            <dt>Авиакомпания</dt>
+            <dd>{{ flight.airline }}</dd>
+
+            <dt>Тип рейса</dt>
+            <dd>{{ flight.get_flight_type_display() }}</dd>
+
+            <dt>Выход на посадку</dt>
+            <dd>{{ flight.gate or "Не назначен" }}</dd>
+        </dl>
+    </section>
+
+    <section class="panel">
+        <h2>Информация о местах</h2>
+
+        <div class="seats-number">
+            {{ flight.free_seats }}
+        </div>
+
+        <p class="seats-caption">Свободно мест</p>
+
+        <dl class="flight-details">
+            <dt>Всего мест</dt>
+            <dd>{{ flight.seat_capacity }}</dd>
+
+            <dt>Забронировано</dt>
+            <dd>{{ flight.reserved_seats }}</dd>
+
+            <dt>Свободно</dt>
+            <dd>{{ flight.free_seats }}</dd>
+        </dl>
+
+        {% if flight.departure_time < now %}
+            <p class="notice">
+                Время отправления этого рейса уже прошло.
+            </p>
+        {% elif flight.free_seats == 0 %}
+            <p class="notice">
+                Свободных мест на рейсе нет.
+            </p>
+        {% endif %}
+    </section>
+</div>
+
+{% endblock %}

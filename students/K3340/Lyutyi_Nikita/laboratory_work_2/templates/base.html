@@ -1,13 +1,11 @@
+
 {% load static %}
 
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1"
-    >
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>{% block title %}Веб-приложение{% endblock %}</title>
 
@@ -24,15 +22,15 @@
 <body>
     <nav class="site-nav">
         <div class="nav-inner">
-
-            <a
-                class="brand"
-                href="{% url 'project_first_app:car_list' %}"
-            >
-                Веб-программирование
+            <a class="brand" href="{% url 'flights:flight_list' %}">
+                FlightBoard
             </a>
 
             <div class="nav-links">
+                <a href="{% url 'flights:flight_list' %}">
+                    Рейсы
+                </a>
+
                 <a href="{% url 'project_first_app:car_list' %}">
                     Автомобили
                 </a>
@@ -44,27 +42,18 @@
 
             <div class="nav-account">
                 {% if user.is_authenticated %}
-
                     <span class="user-name">
                         {{ user.username }}
                     </span>
 
-                    <form
-                        method="post"
-                        action="{% url 'accounts:logout' %}"
-                    >
+                    <form method="post" action="{% url 'accounts:logout' %}">
                         {% csrf_token %}
 
-                        <button
-                            type="submit"
-                            class="logout-button"
-                        >
+                        <button class="logout-button" type="submit">
                             Выйти
                         </button>
                     </form>
-
                 {% else %}
-
                     <a href="{% url 'accounts:login' %}">
                         Войти
                     </a>
@@ -72,15 +61,13 @@
                     <a href="{% url 'accounts:register' %}">
                         Регистрация
                     </a>
-
                 {% endif %}
             </div>
         </div>
     </nav>
 
     <main class="container">
-        {% block content %}
-        {% endblock %}
+        {% block content %}{% endblock %}
     </main>
 </body>
 </html>

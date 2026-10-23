@@ -72,7 +72,17 @@ TEMPLATES = [
             ],
         },
     },
+    {
+        "BACKEND": "django.template.backends.jinja2.Jinja2",
+        "NAME": "jinja2",
+        "DIRS": [],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "environment": "django_project_lyutyi.jinja2.environment",
+        },
+    },
 ]
+
 
 
 WSGI_APPLICATION = "django_project_lyutyi.wsgi.application"
@@ -131,4 +141,4 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Аутентификация
 LOGIN_URL = "accounts:login"
-LOGIN_REDIRECT_URL = "project_first_app:car_list"
+LOGIN_REDIRECT_URL = "flights:flight_list"

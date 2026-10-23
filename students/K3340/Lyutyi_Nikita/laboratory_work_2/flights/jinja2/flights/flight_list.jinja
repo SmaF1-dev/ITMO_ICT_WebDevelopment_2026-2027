@@ -1,0 +1,115 @@
+
+{% extends "flights/base.jinja" %}
+
+{% block title %}Табло авиарейсов{% endblock %}
+
+{% block content %}
+
+<section class="page-heading">
+    <div>
+        <p class="eyebrow">Информация об авиаперелётах</p>
+        <h1>Табло авиарейсов</h1>
+        <p class="subtitle">
+            Актуальные записи из базы данных PostgreSQL.
+        </p>
+    </div>
+
+    <div class="heading-icon" aria-hidden="true">✈</div>
+</section>
+
+<section class="panel">
+    <div class="panel-heading">
+        <div>
+            <h2>Расписание</h2>
+            <p>Прибытия и отправления</p>
+        </div>
+
+        <span class="counter">
+            {{ flights|length }} рейсов
+        </span>
+    </div>
+
+    <div class="table-scroll">
+        <table class="flights-table">
+            <thead>
+                <tr>
+                    <th>Рейс</th>
+                    <th>Авиакомпания</th>
+                    <th>Направление</th>
+                    <th>Отправление</th>
+                    <th>Прибытие</th>
+                    <th>Тип</th>
+                    <th>Выход</th>
+                    <th>Свободно мест</th>
+                    <th></th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for flight in flights %}
+                    <tr>
+                        <td>
+                            <strong>{{ flight.flight_number }}</strong>
+                        </td>
+
+                        <td>{{ flight.airline }}</td>
+
+                        <td>
+                            <div class="route-cell">
+                                <span>{{ flight.departure_airport }}</span>
+                                <span class="route-arrow">→</span>
+                                <span>{{ flight.arrival_airport }}</span>
+                            </div>
+                        </td>
+
+                        <td>
+                            {{ datetime_local(flight.departure_time) }}
+                        </td>
+
+                        <td>
+                            {{ datetime_local(flight.arrival_time) }}
+                        </td>
+
+                        <td>
+                            {% if flight.flight_type == "departure" %}
+                                <span class="status status-departure">
+                                    Отправление
+                                </span>
+                            {% else %}
+                                <span class="status status-arrival">
+                                    Прибытие
+                                </span>
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            {{ flight.gate or "—" }}
+                        </td>
+
+                        <td>
+                            <strong>{{ flight.free_seats }}</strong>
+                            из {{ flight.seat_capacity }}
+                        </td>
+
+                        <td>
+                            <a
+                                class="details-link"
+                                href="{{ url('flights:flight_detail', pk=flight.pk) }}"
+                            >
+                                Подробнее →
+                            </a>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="9" class="empty-state">
+                            Авиарейсы пока не добавлены.
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+{% endblock %}
