@@ -1,0 +1,31 @@
+{% extends "project_first_app/base.html" %}
+
+{% block title %}Редактирование автомобиля{% endblock %}
+
+{% block content %}
+
+<header class="page-header">
+    <p class="eyebrow">Практическая работа 2.2</p>
+    <h1>Редактирование автомобиля</h1>
+    <p>{{ object }}</p>
+</header>
+
+<section class="card form-card">
+    <form method="post">
+        {% csrf_token %}
+
+        {{ form.as_p }}
+
+        <div class="form-actions">
+            <button class="button" type="submit">
+                Сохранить изменения
+            </button>
+
+            <a href="{% url 'project_first_app:car_detail' object.pk %}">
+                Отмена
+            </a>
+        </div>
+    </form>
+</section>
+
+{% endblock %}

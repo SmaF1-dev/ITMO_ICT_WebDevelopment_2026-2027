@@ -18,6 +18,15 @@
   }
 },
 {
+  "model": "project_first_app.carowner",
+  "pk": 3,
+  "fields": {
+    "first_name": "Алексей",
+    "last_name": "Смирнов",
+    "birth_date": "1988-03-12"
+  }
+},
+{
   "model": "project_first_app.car",
   "pk": 1,
   "fields": {

@@ -1,0 +1,39 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>{% block title %}Автопарк{% endblock %}</title>
+
+    <link
+        rel="stylesheet"
+        href="{% static 'project_first_app/css/style.css' %}"
+    >
+</head>
+<body>
+    <nav class="site-nav">
+        <div class="nav-inner">
+            <a class="brand" href="{% url 'project_first_app:car_list' %}">
+                Автопарк
+            </a>
+
+            <div class="nav-links">
+                <a href="{% url 'project_first_app:car_list' %}">
+                    Автомобили
+                </a>
+                <a href="{% url 'project_first_app:owner_list' %}">
+                    Владельцы
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        {% block content %}
+        {% endblock %}
+    </main>
+</body>
+</html>

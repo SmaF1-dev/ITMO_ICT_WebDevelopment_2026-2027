@@ -1,108 +1,102 @@
-{% load static %}
+{% extends "project_first_app/base.html" %}
 
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+{% block title %}{{ owner }} — Владелец{% endblock %}
 
-    <title>Владелец автомобиля</title>
+{% block content %}
 
-    <link rel="stylesheet"
-          href="{% static 'project_first_app/css/style.css' %}">
-</head>
-<body>
-    <main class="container">
-        <header class="page-header">
-            <p class="eyebrow">Практическая работа 2.1</p>
-            <h1>{{ owner.first_name }} {{ owner.last_name }}</h1>
-            <p>Информация о владельце автомобиля</p>
-        </header>
+<header class="page-header">
+    <p class="eyebrow">Практическая работа 2.1</p>
+    <h1>{{ owner }}</h1>
+    <p>Информация о владельце автомобиля.</p>
+</header>
 
-        <section class="card">
-            <h2>Личные данные</h2>
+<section class="card">
+    <h2>Личные данные</h2>
 
-            <dl class="details">
-                <dt>Идентификатор</dt>
-                <dd>{{ owner.id }}</dd>
+    <dl class="details">
+        <dt>ID</dt>
+        <dd>{{ owner.id }}</dd>
 
-                <dt>Имя</dt>
-                <dd>{{ owner.first_name }}</dd>
+        <dt>Имя</dt>
+        <dd>{{ owner.first_name }}</dd>
 
-                <dt>Фамилия</dt>
-                <dd>{{ owner.last_name }}</dd>
+        <dt>Фамилия</dt>
+        <dd>{{ owner.last_name }}</dd>
 
-                <dt>Дата рождения</dt>
-                <dd>
-                    {% if owner.birth_date %}
-                        {{ owner.birth_date|date:"d.m.Y" }}
-                    {% else %}
-                        Не указана
-                    {% endif %}
-                </dd>
-            </dl>
-        </section>
-
-        <section class="card">
-            <h2>Водительское удостоверение</h2>
-
-            {% if driver_license %}
-                <dl class="details">
-                    <dt>Номер</dt>
-                    <dd>{{ driver_license.number }}</dd>
-
-                    <dt>Дата выдачи</dt>
-                    <dd>{{ driver_license.issue_date|date:"d.m.Y" }}</dd>
-
-                    <dt>Действительно до</dt>
-                    <dd>{{ driver_license.expiry_date|date:"d.m.Y" }}</dd>
-                </dl>
+        <dt>Дата рождения</dt>
+        <dd>
+            {% if owner.birth_date %}
+                {{ owner.birth_date|date:"d.m.Y" }}
             {% else %}
-                <p class="muted">Удостоверение не указано.</p>
+                Не указана
             {% endif %}
-        </section>
+        </dd>
+    </dl>
+</section>
 
-        <section class="card">
-            <h2>История владения</h2>
+<section class="card">
+    <h2>Водительское удостоверение</h2>
 
-            <div class="table-wrapper">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Автомобиль</th>
-                            <th>Начало владения</th>
-                            <th>Конец владения</th>
-                        </tr>
-                    </thead>
+    {% if driver_license %}
+        <dl class="details">
+            <dt>Номер</dt>
+            <dd>{{ driver_license.number }}</dd>
 
-                    <tbody>
-                        {% for ownership in ownerships %}
-                            <tr>
-                                <td>{{ ownership.car }}</td>
+            <dt>Дата выдачи</dt>
+            <dd>{{ driver_license.issue_date|date:"d.m.Y" }}</dd>
 
-                                <td>
-                                    {{ ownership.start_date|date:"d.m.Y" }}
-                                </td>
+            <dt>Действительно до</dt>
+            <dd>{{ driver_license.expiry_date|date:"d.m.Y" }}</dd>
+        </dl>
+    {% else %}
+        <p class="muted">Удостоверение не указано.</p>
+    {% endif %}
+</section>
 
-                                <td>
-                                    {% if ownership.end_date %}
-                                        {{ ownership.end_date|date:"d.m.Y" }}
-                                    {% else %}
-                                        По настоящее время
-                                    {% endif %}
-                                </td>
-                            </tr>
-                        {% empty %}
-                            <tr>
-                                <td colspan="3">
-                                    Записей о владении пока нет.
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        </section>
-    </main>
-</body>
-</html>
+<section class="card">
+    <h2>История владения</h2>
+
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>Автомобиль</th>
+                    <th>Начало</th>
+                    <th>Окончание</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for ownership in ownerships %}
+                    <tr>
+                        <td>
+                            <a href="{% url 'project_first_app:car_detail' ownership.car.id %}">
+                                {{ ownership.car }}
+                            </a>
+                        </td>
+
+                        <td>{{ ownership.start_date|date:"d.m.Y" }}</td>
+
+                        <td>
+                            {% if ownership.end_date %}
+                                {{ ownership.end_date|date:"d.m.Y" }}
+                            {% else %}
+                                По настоящее время
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="3">Записей пока нет.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<a class="back-link" href="{% url 'project_first_app:owner_list' %}">
+    ← К списку владельцев
+</a>
+
+{% endblock %}
