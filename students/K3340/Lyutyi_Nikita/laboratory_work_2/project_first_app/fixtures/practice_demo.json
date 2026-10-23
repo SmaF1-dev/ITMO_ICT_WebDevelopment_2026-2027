@@ -1,0 +1,120 @@
+[
+{
+  "model": "project_first_app.carowner",
+  "pk": 1,
+  "fields": {
+    "first_name": "Иван",
+    "last_name": "Петров",
+    "birth_date": "1990-04-15"
+  }
+},
+{
+  "model": "project_first_app.carowner",
+  "pk": 2,
+  "fields": {
+    "first_name": "Мария",
+    "last_name": "Соколова",
+    "birth_date": "1995-08-20"
+  }
+},
+{
+  "model": "project_first_app.car",
+  "pk": 1,
+  "fields": {
+    "brand": "BMW",
+    "model": "320i",
+    "color": "black",
+    "registration_number": "A111AA"
+  }
+},
+{
+  "model": "project_first_app.car",
+  "pk": 2,
+  "fields": {
+    "brand": "Kia",
+    "model": "Rio",
+    "color": "white",
+    "registration_number": "B222BB"
+  }
+},
+{
+  "model": "project_first_app.car",
+  "pk": 3,
+  "fields": {
+    "brand": "Toyota",
+    "model": "Corolla",
+    "color": "gray",
+    "registration_number": "C333CC"
+  }
+},
+{
+  "model": "project_first_app.car",
+  "pk": 4,
+  "fields": {
+    "brand": "Hyundai",
+    "model": "Solaris",
+    "color": "blue",
+    "registration_number": "D444DD"
+  }
+},
+{
+  "model": "project_first_app.ownership",
+  "pk": 1,
+  "fields": {
+    "owner": 1,
+    "car": 1,
+    "start_date": "2020-01-01",
+    "end_date": null
+  }
+},
+{
+  "model": "project_first_app.ownership",
+  "pk": 2,
+  "fields": {
+    "owner": 1,
+    "car": 2,
+    "start_date": "2021-03-01",
+    "end_date": "2022-12-31"
+  }
+},
+{
+  "model": "project_first_app.ownership",
+  "pk": 3,
+  "fields": {
+    "owner": 2,
+    "car": 2,
+    "start_date": "2023-01-01",
+    "end_date": null
+  }
+},
+{
+  "model": "project_first_app.ownership",
+  "pk": 4,
+  "fields": {
+    "owner": 1,
+    "car": 3,
+    "start_date": "2019-06-01",
+    "end_date": "2021-12-31"
+  }
+},
+{
+  "model": "project_first_app.ownership",
+  "pk": 5,
+  "fields": {
+    "owner": 2,
+    "car": 3,
+    "start_date": "2022-01-01",
+    "end_date": null
+  }
+},
+{
+  "model": "project_first_app.ownership",
+  "pk": 6,
+  "fields": {
+    "owner": 2,
+    "car": 4,
+    "start_date": "2021-02-01",
+    "end_date": null
+  }
+}
+]
