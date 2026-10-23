@@ -28,12 +28,24 @@ urlpatterns = [
         views.owner_detail,
         name="owner_detail",
     ),
+    path(
+        "owners/new/",
+        views.owner_create,
+        name="owner_create",
+    ),
 
     # Cars — CBV
     path(
         "cars/",
         views.CarListView.as_view(),
         name="car_list",
+    ),
+    path(
+        "cars/new/",
+        staff_member_required(
+            views.CarCreateView.as_view()
+        ),
+        name="car_create",
     ),
     path(
         "cars/<int:pk>/",
@@ -46,5 +58,12 @@ urlpatterns = [
             views.CarUpdateView.as_view()
         ),
         name="car_update",
+    ),
+    path(
+        "cars/<int:pk>/delete/",
+        staff_member_required(
+            views.CarDeleteView.as_view()
+        ),
+        name="car_delete",
     ),
 ]

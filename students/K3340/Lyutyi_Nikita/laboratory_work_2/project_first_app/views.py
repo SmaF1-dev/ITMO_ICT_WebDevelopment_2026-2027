@@ -1,15 +1,23 @@
+from django.contrib.admin.views.decorators import staff_member_required
 from django.db.models import Count
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
-from django.views.generic import DetailView, ListView, UpdateView
+from django.views.generic import (
+    CreateView,
+    DeleteView,
+    DetailView,
+    ListView,
+    UpdateView,
+)
 
+from .forms import CarForm, CarOwnerForm
 from .models import Car, CarOwner, DriverLicense
 
 
 # Function-Based Views
 
 def owner_list(request):
-    """Список владельцев и количество их автомобилей."""
+    """Список владельцев с количеством автомобилей."""
 
     owners = CarOwner.objects.annotate(
         car_count=Count("cars", distinct=True)
@@ -23,7 +31,7 @@ def owner_list(request):
 
 
 def owner_detail(request, owner_id):
-    """Информация о владельце автомобиля."""
+    """Подробная информация о владельце автомобиля."""
 
     owner = get_object_or_404(CarOwner, pk=owner_id)
 
@@ -46,6 +54,27 @@ def owner_detail(request, owner_id):
     )
 
 
+@staff_member_required
+def owner_create(request):
+    """Создание владельца с помощью FBV и ModelForm."""
+
+    if request.method == "POST":
+        form = CarOwnerForm(request.POST)
+
+        if form.is_valid():
+            form.save()
+            return redirect("project_first_app:owner_list")
+
+    else:
+        form = CarOwnerForm()
+
+    return render(
+        request,
+        "project_first_app/owner_form.html",
+        {"form": form},
+    )
+
+
 # Class-Based Views
 
 class CarListView(ListView):
@@ -57,7 +86,7 @@ class CarListView(ListView):
 
 
 class CarDetailView(DetailView):
-    """Информация о конкретном автомобиле."""
+    """Подробная информация об автомобиле."""
 
     model = Car
     template_name = "project_first_app/car_detail.html"
@@ -75,18 +104,39 @@ class CarDetailView(DetailView):
         return context
 
 
+class CarCreateView(CreateView):
+    """Создание нового автомобиля."""
+
+    model = Car
+    form_class = CarForm
+    template_name = "project_first_app/car_form.html"
+
+    success_url = reverse_lazy(
+        "project_first_app:car_list"
+    )
+
+
 class CarUpdateView(UpdateView):
-    """Редактирование автомобиля."""
+    """Редактирование существующего автомобиля."""
+
+    model = Car
+    form_class = CarForm
+    template_name = "project_first_app/car_form.html"
+
+    success_url = reverse_lazy(
+        "project_first_app:car_list"
+    )
+
+
+class CarDeleteView(DeleteView):
+    """Удаление автомобиля с подтверждением."""
 
     model = Car
 
-    fields = [
-        "brand",
-        "model",
-        "color",
-        "registration_number",
-    ]
+    template_name = (
+        "project_first_app/car_confirm_delete.html"
+    )
 
-    template_name = "project_first_app/car_form.html"
-
-    success_url = reverse_lazy("project_first_app:car_list")
+    success_url = reverse_lazy(
+        "project_first_app:car_list"
+    )

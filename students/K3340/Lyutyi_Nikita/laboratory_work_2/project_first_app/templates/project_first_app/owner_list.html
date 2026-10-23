@@ -11,6 +11,17 @@
 </header>
 
 <section class="card">
+    <div class="section-heading">
+        <h2>Все владельцы</h2>
+
+        {% if user.is_staff %}
+            <a class="button"
+               href="{% url 'project_first_app:owner_create' %}">
+                Добавить владельца
+            </a>
+        {% endif %}
+    </div>
+
     <div class="table-wrapper">
         <table>
             <thead>
@@ -19,7 +30,7 @@
                     <th>Владелец</th>
                     <th>Дата рождения</th>
                     <th>Автомобилей</th>
-                    <th></th>
+                    <th>Действия</th>
                 </tr>
             </thead>
 
@@ -27,7 +38,9 @@
                 {% for owner in owners %}
                     <tr>
                         <td>{{ owner.id }}</td>
+
                         <td>{{ owner }}</td>
+
                         <td>
                             {% if owner.birth_date %}
                                 {{ owner.birth_date|date:"d.m.Y" }}
@@ -35,7 +48,9 @@
                                 —
                             {% endif %}
                         </td>
+
                         <td>{{ owner.car_count }}</td>
+
                         <td>
                             <a href="{% url 'project_first_app:owner_detail' owner.id %}">
                                 Подробнее
@@ -44,7 +59,9 @@
                     </tr>
                 {% empty %}
                     <tr>
-                        <td colspan="5">Владельцев пока нет.</td>
+                        <td colspan="5">
+                            Владельцев пока нет.
+                        </td>
                     </tr>
                 {% endfor %}
             </tbody>

@@ -1,0 +1,31 @@
+{% extends "project_first_app/base.html" %}
+
+{% block title %}Добавление владельца{% endblock %}
+
+{% block content %}
+
+<header class="page-header">
+    <p class="eyebrow">Практическая работа 2.2</p>
+    <h1>Добавление владельца</h1>
+    <p>Заполните информацию о новом владельце автомобиля.</p>
+</header>
+
+<section class="card form-card">
+    <form method="post">
+        {% csrf_token %}
+
+        {{ form.as_p }}
+
+        <div class="form-actions">
+            <button class="button" type="submit">
+                Добавить владельца
+            </button>
+
+            <a href="{% url 'project_first_app:owner_list' %}">
+                Отмена
+            </a>
+        </div>
+    </form>
+</section>
+
+{% endblock %}

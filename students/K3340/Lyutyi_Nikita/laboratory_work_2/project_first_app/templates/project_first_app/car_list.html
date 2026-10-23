@@ -11,6 +11,17 @@
 </header>
 
 <section class="card">
+    <div class="section-heading">
+        <h2>Все автомобили</h2>
+
+        {% if user.is_staff %}
+            <a class="button"
+               href="{% url 'project_first_app:car_create' %}">
+                Добавить автомобиль
+            </a>
+        {% endif %}
+    </div>
+
     <div class="table-wrapper">
         <table>
             <thead>
@@ -42,12 +53,18 @@
                                 <a href="{% url 'project_first_app:car_update' car.pk %}">
                                     Изменить
                                 </a>
+
+                                <a href="{% url 'project_first_app:car_delete' car.pk %}">
+                                    Удалить
+                                </a>
                             {% endif %}
                         </td>
                     </tr>
                 {% empty %}
                     <tr>
-                        <td colspan="6">Автомобилей пока нет.</td>
+                        <td colspan="6">
+                            Автомобилей пока нет.
+                        </td>
                     </tr>
                 {% endfor %}
             </tbody>

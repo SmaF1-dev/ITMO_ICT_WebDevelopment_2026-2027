@@ -27,6 +27,33 @@
   }
 },
 {
+  "model": "project_first_app.carowner",
+  "pk": 4,
+  "fields": {
+    "first_name": "Ольга",
+    "last_name": "Кузнецова",
+    "birth_date": "1992-06-17"
+  }
+},
+{
+  "model": "project_first_app.carowner",
+  "pk": 5,
+  "fields": {
+    "first_name": "Дмитрий",
+    "last_name": "Орлов",
+    "birth_date": "1987-11-04"
+  }
+},
+{
+  "model": "project_first_app.carowner",
+  "pk": 6,
+  "fields": {
+    "first_name": "Елена",
+    "last_name": "Морозова",
+    "birth_date": "1996-11-25"
+  }
+},
+{
   "model": "project_first_app.car",
   "pk": 1,
   "fields": {
@@ -64,6 +91,36 @@
     "model": "Solaris",
     "color": "blue",
     "registration_number": "D444DD"
+  }
+},
+{
+  "model": "project_first_app.car",
+  "pk": 5,
+  "fields": {
+    "brand": "Skoda",
+    "model": "Octavia",
+    "color": "white",
+    "registration_number": "E555EE"
+  }
+},
+{
+  "model": "project_first_app.car",
+  "pk": 6,
+  "fields": {
+    "brand": "Honda",
+    "model": "Civic",
+    "color": "red",
+    "registration_number": "F666FF"
+  }
+},
+{
+  "model": "project_first_app.car",
+  "pk": 7,
+  "fields": {
+    "brand": "Mazda",
+    "model": "3",
+    "color": "blue",
+    "registration_number": "G777GG"
   }
 },
 {

@@ -1,0 +1,40 @@
+{% extends "project_first_app/base.html" %}
+
+{% block title %}Удаление автомобиля{% endblock %}
+
+{% block content %}
+
+<header class="page-header">
+    <p class="eyebrow">Практическая работа 2.2</p>
+    <h1>Удаление автомобиля</h1>
+    <p>Подтвердите удаление записи.</p>
+</header>
+
+<section class="card form-card">
+    <h2>{{ object }}</h2>
+
+    <p>
+        Вы действительно хотите удалить этот автомобиль?
+        Действие нельзя отменить.
+    </p>
+
+    <p class="muted">
+        Связанные записи истории владения также будут удалены.
+    </p>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="form-actions">
+            <button class="button" type="submit">
+                Удалить автомобиль
+            </button>
+
+            <a href="{% url 'project_first_app:car_detail' object.pk %}">
+                Отмена
+            </a>
+        </div>
+    </form>
+</section>
+
+{% endblock %}
