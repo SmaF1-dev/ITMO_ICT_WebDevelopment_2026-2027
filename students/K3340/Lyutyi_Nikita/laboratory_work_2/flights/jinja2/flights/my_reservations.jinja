@@ -1,0 +1,113 @@
+
+{% extends "flights/base.jinja" %}
+
+{% block title %}Мои бронирования{% endblock %}
+
+{% block content %}
+
+<section class="page-heading">
+    <div>
+        <p class="eyebrow">Личный кабинет</p>
+        <h1>Мои бронирования</h1>
+
+        <p class="subtitle">
+            Бронирования пользователя {{ request.user.username }}.
+        </p>
+    </div>
+</section>
+
+<section class="panel">
+    <div class="panel-heading">
+        <h2>Забронированные места</h2>
+
+        <a class="details-link" href="{{ url('flights:flight_list') }}">
+            Все рейсы →
+        </a>
+    </div>
+
+    <div class="table-scroll">
+        <table class="flights-table">
+            <thead>
+                <tr>
+                    <th>Рейс</th>
+                    <th>Авиакомпания</th>
+                    <th>Отправление</th>
+                    <th>Место</th>
+                    <th>Статус</th>
+                    <th>Номер билета</th>
+                    <th>Действия</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for reservation in reservations %}
+                    <tr>
+                        <td>
+                            <a href="{{ url('flights:flight_detail', pk=reservation.flight.pk) }}">
+                                {{ reservation.flight.flight_number }}
+                            </a>
+                        </td>
+
+                        <td>
+                            {{ reservation.flight.airline }}
+                        </td>
+
+                        <td>
+                            {{ datetime_local(reservation.flight.departure_time) }}
+                        </td>
+
+                        <td>
+                            <strong>{{ reservation.seat_number }}</strong>
+                        </td>
+
+                        <td>
+                            {% if reservation.is_checked_in %}
+                                <span class="status status-arrival">
+                                    Зарегистрирован
+                                </span>
+                            {% else %}
+                                <span class="status status-departure">
+                                    Забронирован
+                                </span>
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            {{ reservation.ticket_number or "—" }}
+                        </td>
+
+                        <td>
+                            {% if (
+                                reservation.flight.departure_time > now
+                                and not reservation.is_checked_in
+                            ) %}
+                                <div class="reservation-links">
+                                    <a href="{{ url('flights:reservation_update', pk=reservation.pk) }}">
+                                        Изменить
+                                    </a>
+
+                                    <a href="{{ url('flights:reservation_delete', pk=reservation.pk) }}">
+                                        Отменить
+                                    </a>
+                                </div>
+                            {% else %}
+                                <span class="muted-text">
+                                    Недоступно
+                                </span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="7" class="empty-state">
+                            У вас пока нет бронирований.
+                            Выберите рейс на табло.
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+{% endblock %}

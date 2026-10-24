@@ -90,14 +90,31 @@
             <dd>{{ flight.free_seats }}</dd>
         </dl>
 
-        {% if flight.departure_time < now %}
+        {% if flight.departure_time <= now %}
             <p class="notice">
-                Время отправления этого рейса уже прошло.
+                Бронирование закрыто: время отправления прошло.
             </p>
+
         {% elif flight.free_seats == 0 %}
             <p class="notice">
-                Свободных мест на рейсе нет.
+                На этом рейсе не осталось свободных мест.
             </p>
+
+        {% else %}
+            <div class="reservation-action">
+                <a
+                    class="primary-action"
+                    href="{{ url('flights:reservation_create', pk=flight.pk) }}"
+                >
+                    Забронировать место
+                </a>
+
+                {% if not request.user.is_authenticated %}
+                    <p class="action-hint">
+                        Для бронирования потребуется войти в аккаунт.
+                    </p>
+                {% endif %}
+            </div>
         {% endif %}
     </section>
 </div>
