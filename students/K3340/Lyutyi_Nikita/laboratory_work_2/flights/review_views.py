@@ -6,12 +6,12 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 
 from .forms import ReviewForm
-from .models import Flight, Review
+from .models import Flight, Reservation, Review
 from .views import FlightDetailView
 
 
 class FlightReviewsDetailView(FlightDetailView):
-    """Страница рейса с отзывами и средней оценкой."""
+    """Страница рейса с отзывами и списком пассажиров."""
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -30,6 +30,13 @@ class FlightReviewsDetailView(FlightDetailView):
                 count=Count("pk"),
                 average=Avg("rating"),
             )
+        )
+
+        context["passengers"] = (
+            Reservation.objects
+            .filter(flight=self.object)
+            .select_related("user")
+            .order_by("seat_number")
         )
 
         if self.request.user.is_authenticated:

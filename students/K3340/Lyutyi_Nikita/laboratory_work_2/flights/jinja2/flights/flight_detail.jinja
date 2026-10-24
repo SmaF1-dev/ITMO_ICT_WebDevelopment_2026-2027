@@ -122,6 +122,57 @@
     </section>
 </div>
 
+<section class="panel">
+    <div class="panel-heading">
+        <div>
+            <h2>Пассажиры рейса</h2>
+            <p>
+                Список забронированных мест и статусов регистрации.
+            </p>
+        </div>
+    </div>
+
+    <div class="table-scroll">
+        <table class="flights-table">
+            <thead>
+                <tr>
+                    <th>Пассажир</th>
+                    <th>Номер места</th>
+                    <th>Статус</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for passenger in passengers %}
+                    <tr>
+                        <td>{{ passenger.user.username }}</td>
+
+                        <td>{{ passenger.seat_number }}</td>
+
+                        <td>
+                            {% if passenger.is_checked_in %}
+                                <span class="status status-arrival">
+                                    Зарегистрирован
+                                </span>
+                            {% else %}
+                                <span class="status status-departure">
+                                    Забронирован
+                                </span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="3" class="empty-state">
+                            Бронирований на этот рейс пока нет.
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+
 <section class="panel reviews-section">
     <div class="reviews-heading">
         <div>

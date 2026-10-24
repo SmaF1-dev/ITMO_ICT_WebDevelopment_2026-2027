@@ -1,6 +1,6 @@
 from django.urls import path
 
-from . import review_views, views
+from . import checkin_views, review_views, views
 
 
 app_name = "flights"
@@ -35,6 +35,16 @@ urlpatterns = [
         "reviews/<int:pk>/delete/",
         review_views.review_delete,
         name="review_delete",
+    ),
+    path(
+        "check-in/",
+        checkin_views.check_in_list,
+        name="check_in_list",
+    ),
+    path(
+        "check-in/<int:pk>/",
+        checkin_views.check_in_detail,
+        name="check_in_detail",
     ),
     path(
         "<int:pk>/reserve/",

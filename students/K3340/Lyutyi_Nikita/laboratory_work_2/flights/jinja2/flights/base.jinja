@@ -20,6 +20,11 @@
         rel="stylesheet"
         href="{{ static('flights/css/reviews.css') }}"
     >
+
+    <link
+        rel="stylesheet"
+        href="{{ static('flights/css/checkin.css') }}"
+    >
 </head>
 <body>
     <header class="site-header">
@@ -38,6 +43,12 @@
                     <a href="{{ url('flights:my_reservations') }}">
                         Мои бронирования
                     </a>
+
+                    {% if request.user.is_staff %}
+                        <a href="{{ url('flights:check_in_list') }}">
+                            Регистрация пассажиров
+                        </a>
+                    {% endif %}
                 {% endif %}
 
                 <a href="{{ url('project_first_app:car_list') }}">
