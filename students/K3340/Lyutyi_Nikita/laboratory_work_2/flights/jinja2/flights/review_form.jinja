@@ -1,0 +1,99 @@
+{% extends "flights/base.jinja" %}
+
+{% block title %}
+    {% if editing %}
+        Редактирование отзыва
+    {% else %}
+        Новый отзыв
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+
+<a
+    class="back-link"
+    href="{{ url('flights:flight_detail', pk=flight.pk) }}"
+>
+    ← К информации о рейсе
+</a>
+
+<section class="page-heading">
+    <div>
+        <p class="eyebrow">Отзывы</p>
+
+        {% if editing %}
+            <h1>Редактирование отзыва</h1>
+        {% else %}
+            <h1>Новый отзыв</h1>
+        {% endif %}
+
+        <p class="subtitle">
+            Рейс {{ flight.flight_number }} · {{ flight.airline }}
+        </p>
+    </div>
+</section>
+
+<section class="panel review-form-card">
+    <h2>Оцените авиарейс</h2>
+
+    <p class="review-intro">
+        {{ flight.departure_airport }}
+        →
+        {{ flight.arrival_airport }}
+    </p>
+
+    <p class="review-intro">
+        Дата отправления:
+        {{ datetime_local(flight.departure_time) }}
+    </p>
+
+    <form method="post" class="review-form">
+        {{ csrf_input }}
+
+        {% for error in form.non_field_errors() %}
+            <p class="review-error">{{ error }}</p>
+        {% endfor %}
+
+        <div class="review-field">
+            <label for="{{ form.rating.id_for_label }}">
+                {{ form.rating.label }}
+            </label>
+
+            {{ form.rating }}
+
+            {% for error in form.rating.errors %}
+                <p class="review-error">{{ error }}</p>
+            {% endfor %}
+        </div>
+
+        <div class="review-field">
+            <label for="{{ form.text.id_for_label }}">
+                {{ form.text.label }}
+            </label>
+
+            {{ form.text }}
+
+            {% for error in form.text.errors %}
+                <p class="review-error">{{ error }}</p>
+            {% endfor %}
+        </div>
+
+        <div class="review-form-actions">
+            <button class="primary-action" type="submit">
+                {% if editing %}
+                    Сохранить изменения
+                {% else %}
+                    Опубликовать отзыв
+                {% endif %}
+            </button>
+
+            <a
+                href="{{ url('flights:flight_detail', pk=flight.pk) }}"
+            >
+                Отмена
+            </a>
+        </div>
+    </form>
+</section>
+
+{% endblock %}

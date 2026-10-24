@@ -1,0 +1,251 @@
+
+{% extends "flights/base.jinja" %}
+
+{% block title %}Регистрация пассажиров{% endblock %}
+
+{% block content %}
+
+<section class="page-heading">
+    <div>
+        <p class="eyebrow">Панель сотрудника</p>
+        <h1>Регистрация пассажиров</h1>
+        <p class="subtitle">
+            Поиск бронирований и оформление регистрации на рейс.
+        </p>
+    </div>
+</section>
+
+<section class="panel">
+    <form
+        method="get"
+        action="{{ url('flights:check_in_list') }}"
+        class="filter-form"
+    >
+        <div class="filter-field filter-field-wide">
+            <label for="reservation-search">
+                Поиск бронирования
+            </label>
+
+            <input
+                id="reservation-search"
+                type="search"
+                name="q"
+                value="{{ query }}"
+                maxlength="100"
+                placeholder="Рейс, логин, имя или номер билета"
+            >
+        </div>
+
+        <div class="filter-field">
+            <label for="reservation-status">
+                Статус
+            </label>
+
+            <select id="reservation-status" name="status">
+                <option value="">Все статусы</option>
+
+                <option
+                    value="pending"
+                    {% if status_filter == "pending" %}selected{% endif %}
+                >
+                    Ожидает регистрации
+                </option>
+
+                <option
+                    value="checked_in"
+                    {% if status_filter == "checked_in" %}selected{% endif %}
+                >
+                    Зарегистрирован
+                </option>
+
+                <option
+                    value="closed"
+                    {% if status_filter == "closed" %}selected{% endif %}
+                >
+                    Рейс отправился
+                </option>
+            </select>
+        </div>
+
+        <div class="filter-field">
+            <label for="reservation-sort">
+                Сортировка
+            </label>
+
+            <select id="reservation-sort" name="sort">
+                <option
+                    value="departure_asc"
+                    {% if sort_order == "departure_asc" %}selected{% endif %}
+                >
+                    По отправлению ↑
+                </option>
+
+                <option
+                    value="departure_desc"
+                    {% if sort_order == "departure_desc" %}selected{% endif %}
+                >
+                    По отправлению ↓
+                </option>
+
+                <option
+                    value="passenger"
+                    {% if sort_order == "passenger" %}selected{% endif %}
+                >
+                    По логину пассажира
+                </option>
+            </select>
+        </div>
+
+        <div class="filter-actions">
+            <button class="primary-action" type="submit">
+                Применить
+            </button>
+
+            <a href="{{ url('flights:check_in_list') }}">
+                Сбросить
+            </a>
+        </div>
+    </form>
+</section>
+
+<section class="panel">
+    <div class="panel-heading">
+        <div>
+            <h2>Бронирования</h2>
+            <p>
+                Регистрация пассажиров через интерфейс сотрудника
+            </p>
+        </div>
+
+        <span class="counter">
+            Найдено: {{ page_obj.paginator.count }}
+        </span>
+    </div>
+
+    <div class="table-scroll">
+        <table class="flights-table">
+            <thead>
+                <tr>
+                    <th>Рейс</th>
+                    <th>Пассажир</th>
+                    <th>Место</th>
+                    <th>Отправление</th>
+                    <th>Статус</th>
+                    <th>Номер билета</th>
+                    <th>Действия</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for reservation in reservations %}
+                    <tr>
+                        <td>
+                            <a
+                                href="{{ url('flights:flight_detail', pk=reservation.flight.pk) }}"
+                            >
+                                {{ reservation.flight.flight_number }}
+                            </a>
+                        </td>
+
+                        <td>
+                            <strong>
+                                {{ reservation.user.username }}
+                            </strong>
+                        </td>
+
+                        <td>{{ reservation.seat_number }}</td>
+
+                        <td>
+                            {{ datetime_local(reservation.flight.departure_time) }}
+                        </td>
+
+                        <td>
+                            {% if reservation.is_checked_in %}
+                                <span class="status status-arrival">
+                                    Зарегистрирован
+                                </span>
+
+                            {% elif reservation.flight.departure_time <= now %}
+                                <span class="status status-past">
+                                    Рейс отправился
+                                </span>
+
+                            {% else %}
+                                <span class="status status-departure">
+                                    Ожидает регистрации
+                                </span>
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            {{ reservation.ticket_number or "—" }}
+                        </td>
+
+                        <td>
+                            {% if reservation.is_checked_in %}
+                                <span class="muted-text">
+                                    Завершено
+                                </span>
+
+                            {% elif reservation.flight.departure_time <= now %}
+                                <span class="muted-text">
+                                    Недоступно
+                                </span>
+
+                            {% else %}
+                                <a
+                                    class="details-link"
+                                    href="{{ url('flights:check_in_detail', pk=reservation.pk) }}"
+                                >
+                                    Зарегистрировать →
+                                </a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="7" class="empty-state">
+                            Бронирования по заданным условиям
+                            не найдены.
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% if page_obj.paginator.num_pages > 1 %}
+        <nav
+            class="pagination"
+            aria-label="Страницы бронирований"
+        >
+            <div class="pagination-links">
+                {% if page_obj.has_previous() %}
+                    <a href="{{ page_prefix }}page=1">
+                        Первая
+                    </a>
+
+                    <a href="{{ page_prefix }}page={{ page_obj.previous_page_number() }}">
+                        ← Назад
+                    </a>
+                {% endif %}
+            </div>
+
+            <span class="pagination-current">Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}</span>
+
+            <div class="pagination-links">
+                {% if page_obj.has_next() %}
+                    <a href="{{ page_prefix }}page={{ page_obj.next_page_number() }}">
+                        Вперёд →
+                    </a>
+
+                    <a href="{{ page_prefix }}page={{ page_obj.paginator.num_pages }}">
+                        Последняя
+                    </a>
+                {% endif %}
+            </div>
+        </nav>
+    {% endif %}
+</section>
+
+{% endblock %}

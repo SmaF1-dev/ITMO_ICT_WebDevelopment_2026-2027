@@ -1,0 +1,233 @@
+
+{% extends "flights/base.jinja" %}
+
+{% block title %}Табло авиарейсов{% endblock %}
+
+{% block content %}
+
+<section class="page-heading">
+    <div>
+        <p class="eyebrow">Информация об авиаперелётах</p>
+        <h1>Табло авиарейсов</h1>
+        <p class="subtitle">
+            Поиск и расписание рейсов.
+        </p>
+    </div>
+
+    <div class="heading-icon" aria-hidden="true">✈</div>
+</section>
+
+<section class="panel">
+    <form
+        method="get"
+        action="{{ url('flights:flight_list') }}"
+        class="filter-form"
+    >
+        <div class="filter-field filter-field-wide">
+            <label for="flight-search">Поиск рейса</label>
+
+            <input
+                id="flight-search"
+                name="q"
+                type="search"
+                maxlength="100"
+                value="{{ search_query }}"
+                placeholder="Номер, авиакомпания или аэропорт"
+            >
+        </div>
+
+        <div class="filter-field">
+            <label for="flight-type">Тип рейса</label>
+
+            <select id="flight-type" name="type">
+                <option value="">Все рейсы</option>
+
+                <option
+                    value="departure"
+                    {% if type_filter == "departure" %}selected{% endif %}
+                >
+                    Отправления
+                </option>
+
+                <option
+                    value="arrival"
+                    {% if type_filter == "arrival" %}selected{% endif %}
+                >
+                    Прибытия
+                </option>
+            </select>
+        </div>
+
+        <div class="filter-field">
+            <label for="flight-sort">Сортировка</label>
+
+            <select id="flight-sort" name="sort">
+                <option
+                    value="departure_asc"
+                    {% if sort_order == "departure_asc" %}selected{% endif %}
+                >
+                    По отправлению ↑
+                </option>
+
+                <option
+                    value="departure_desc"
+                    {% if sort_order == "departure_desc" %}selected{% endif %}
+                >
+                    По отправлению ↓
+                </option>
+
+                <option
+                    value="airline"
+                    {% if sort_order == "airline" %}selected{% endif %}
+                >
+                    По авиакомпании
+                </option>
+
+                <option
+                    value="free_desc"
+                    {% if sort_order == "free_desc" %}selected{% endif %}
+                >
+                    По свободным местам ↓
+                </option>
+            </select>
+        </div>
+
+        <div class="filter-actions">
+            <button type="submit" class="primary-action">
+                Применить
+            </button>
+
+            <a href="{{ url('flights:flight_list') }}">
+                Сбросить
+            </a>
+        </div>
+    </form>
+</section>
+
+<section class="panel">
+    <div class="panel-heading">
+        <div>
+            <h2>Расписание</h2>
+            <p>Прибытия и отправления</p>
+        </div>
+
+        <span class="counter">
+            Найдено: {{ paginator.count }}
+        </span>
+    </div>
+
+    <div class="table-scroll">
+        <table class="flights-table">
+            <thead>
+                <tr>
+                    <th>Рейс</th>
+                    <th>Авиакомпания</th>
+                    <th>Направление</th>
+                    <th>Отправление</th>
+                    <th>Прибытие</th>
+                    <th>Тип</th>
+                    <th>Выход</th>
+                    <th>Свободные места</th>
+                    <th>Действия</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for flight in flights %}
+                    <tr>
+                        <td>
+                            <strong>{{ flight.flight_number }}</strong>
+                        </td>
+
+                        <td>{{ flight.airline }}</td>
+
+                        <td>
+                            <div class="route-cell">
+                                <span>{{ flight.departure_airport }}</span>
+                                <span class="route-arrow">→</span>
+                                <span>{{ flight.arrival_airport }}</span>
+                            </div>
+                        </td>
+
+                        <td>
+                            {{ datetime_local(flight.departure_time) }}
+                        </td>
+
+                        <td>
+                            {{ datetime_local(flight.arrival_time) }}
+                        </td>
+
+                        <td>
+                            {% if flight.flight_type == "departure" %}
+                                <span class="status status-departure">
+                                    Отправление
+                                </span>
+                            {% else %}
+                                <span class="status status-arrival">
+                                    Прибытие
+                                </span>
+                            {% endif %}
+                        </td>
+
+                        <td>{{ flight.gate or "—" }}</td>
+
+                        <td>
+                            <strong>{{ flight.free_seats }}</strong>
+                            из {{ flight.seat_capacity }}
+                        </td>
+
+                        <td>
+                            <a
+                                class="details-link"
+                                href="{{ url('flights:flight_detail', pk=flight.pk) }}"
+                            >
+                                Подробнее →
+                            </a>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="9" class="empty-state">
+                            По выбранным условиям рейсы не найдены.
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% if is_paginated %}
+        <nav
+            class="pagination"
+            aria-label="Страницы табло"
+        >
+            <div class="pagination-links">
+                {% if page_obj.has_previous() %}
+                    <a href="{{ page_prefix }}page=1">
+                        Первая
+                    </a>
+
+                    <a href="{{ page_prefix }}page={{ page_obj.previous_page_number() }}">
+                        ← Назад
+                    </a>
+                {% endif %}
+            </div>
+
+            <span class="pagination-current">Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}</span>
+
+            <div class="pagination-links">
+                {% if page_obj.has_next() %}
+                    <a href="{{ page_prefix }}page={{ page_obj.next_page_number() }}">
+                        Вперёд →
+                    </a>
+
+                    <a href="{{ page_prefix }}page={{ page_obj.paginator.num_pages }}">
+                        Последняя
+                    </a>
+                {% endif %}
+            </div>
+        </nav>
+    {% endif %}
+</section>
+
+{% endblock %}

@@ -1,0 +1,89 @@
+{% extends "flights/base.jinja" %}
+
+{% block title %}Оформление регистрации{% endblock %}
+
+{% block content %}
+
+<a class="back-link" href="{{ url('flights:check_in_list') }}">
+    ← К списку бронирований
+</a>
+
+<section class="page-heading">
+    <div>
+        <p class="eyebrow">Панель сотрудника</p>
+        <h1>Регистрация пассажира</h1>
+        <p class="subtitle">
+            Проверка бронирования и назначение номера билета.
+        </p>
+    </div>
+</section>
+
+<section class="panel checkin-card">
+    <h2>Данные бронирования</h2>
+
+    <dl class="flight-details">
+        <dt>Номер рейса</dt>
+        <dd>{{ reservation.flight.flight_number }}</dd>
+
+        <dt>Авиакомпания</dt>
+        <dd>{{ reservation.flight.airline }}</dd>
+
+        <dt>Пассажир</dt>
+        <dd>{{ reservation.user.username }}</dd>
+
+        <dt>Номер места</dt>
+        <dd>{{ reservation.seat_number }}</dd>
+
+        <dt>Отправление</dt>
+        <dd>
+            {{ datetime_local(reservation.flight.departure_time) }}
+        </dd>
+    </dl>
+</section>
+
+<section class="panel checkin-card">
+    <h2>Номер билета</h2>
+
+    <p class="checkin-description">
+        После подтверждения пассажир получит статус
+        «Зарегистрирован». Самостоятельное изменение
+        и отмена бронирования станут недоступны.
+    </p>
+
+    <form method="post" class="checkin-form">
+        {{ csrf_input }}
+
+        {% for error in form.non_field_errors() %}
+            <p class="form-error">{{ error }}</p>
+        {% endfor %}
+
+        <div class="form-field">
+            <label for="{{ form.ticket_number.id_for_label }}">
+                {{ form.ticket_number.label }}
+            </label>
+
+            {{ form.ticket_number }}
+
+            {% for error in form.ticket_number.errors %}
+                <p class="form-error">{{ error }}</p>
+            {% endfor %}
+
+            <p class="field-hint">
+                От 6 до 40 символов: латинские буквы,
+                цифры и дефисы.
+            </p>
+        </div>
+
+        <div class="reservation-actions">
+            <button class="primary-action" type="submit">
+                Зарегистрировать пассажира
+            </button>
+
+            <a href="{{ url('flights:check_in_list') }}">
+                Отмена
+            </a>
+        </div>
+    </form>
+</section>
+
+{% endblock %}

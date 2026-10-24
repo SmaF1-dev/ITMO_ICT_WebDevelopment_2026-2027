@@ -1,0 +1,47 @@
+{% extends "project_first_app/base.html" %}
+
+{% block title %}
+    {% if object %}
+        Редактирование автомобиля
+    {% else %}
+        Добавление автомобиля
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+
+<header class="page-header">
+    <p class="eyebrow">Практическая работа 2.2</p>
+
+    {% if object %}
+        <h1>Редактирование автомобиля</h1>
+        <p>{{ object }}</p>
+    {% else %}
+        <h1>Добавление автомобиля</h1>
+        <p>Заполните характеристики нового автомобиля.</p>
+    {% endif %}
+</header>
+
+<section class="card form-card">
+    <form method="post">
+        {% csrf_token %}
+
+        {{ form.as_p }}
+
+        <div class="form-actions">
+            <button class="button" type="submit">
+                {% if object %}
+                    Сохранить изменения
+                {% else %}
+                    Добавить автомобиль
+                {% endif %}
+            </button>
+
+            <a href="{% url 'project_first_app:car_list' %}">
+                Отмена
+            </a>
+        </div>
+    </form>
+</section>
+
+{% endblock %}

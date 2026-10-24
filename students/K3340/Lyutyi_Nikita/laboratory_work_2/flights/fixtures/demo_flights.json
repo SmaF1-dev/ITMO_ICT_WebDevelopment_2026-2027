@@ -1,0 +1,62 @@
+[
+{
+  "model": "flights.flight",
+  "pk": 1,
+  "fields": {
+    "flight_number": "SU1234",
+    "airline": "Аэрофлот",
+    "departure_airport": "Санкт-Петербург (LED)",
+    "arrival_airport": "Москва (SVO)",
+    "departure_time": "2026-11-02T09:30:00Z",
+    "arrival_time": "2026-11-02T11:30:00Z",
+    "flight_type": "departure",
+    "gate": "A12",
+    "seat_capacity": 180
+  }
+},
+{
+  "model": "flights.flight",
+  "pk": 2,
+  "fields": {
+    "flight_number": "DP204",
+    "airline": "Победа",
+    "departure_airport": "Москва (VKO)",
+    "arrival_airport": "Санкт-Петербург (LED)",
+    "departure_time": "2026-11-03T06:15:00Z",
+    "arrival_time": "2026-11-03T07:45:00Z",
+    "flight_type": "arrival",
+    "gate": "B04",
+    "seat_capacity": 189
+  }
+},
+{
+  "model": "flights.flight",
+  "pk": 3,
+  "fields": {
+    "flight_number": "S73123",
+    "airline": "S7 Airlines",
+    "departure_airport": "Санкт-Петербург (LED)",
+    "arrival_airport": "Казань (KZN)",
+    "departure_time": "2026-11-03T11:10:00Z",
+    "arrival_time": "2026-11-03T13:25:00Z",
+    "flight_type": "departure",
+    "gate": "C07",
+    "seat_capacity": 176
+  }
+},
+{
+  "model": "flights.flight",
+  "pk": 4,
+  "fields": {
+    "flight_number": "UT9010",
+    "airline": "Utair",
+    "departure_airport": "Москва (VKO)",
+    "arrival_airport": "Санкт-Петербург (LED)",
+    "departure_time": "2026-10-20T08:00:00Z",
+    "arrival_time": "2026-10-20T09:30:00Z",
+    "flight_type": "arrival",
+    "gate": "B08",
+    "seat_capacity": 150
+  }
+}
+]
