@@ -1,5 +1,8 @@
+from urllib.parse import urlencode
+
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
+from django.core.paginator import Paginator
 from django.db import IntegrityError, transaction
 from django.db.models import Q
 from django.http import HttpResponseForbidden
@@ -19,7 +22,7 @@ def staff_access_allowed(request):
 @login_required
 @require_GET
 def check_in_list(request):
-    """Список бронирований для сотрудников аэропорта."""
+    """Поиск, фильтрация и пагинация бронирований для сотрудников."""
 
     if not staff_access_allowed(request):
         return HttpResponseForbidden(
@@ -27,15 +30,37 @@ def check_in_list(request):
         )
 
     query = request.GET.get("q", "").strip()[:100]
+    status = request.GET.get("status", "")
+    sort = request.GET.get("sort", "departure_asc")
 
-    reservations = (
-        Reservation.objects
-        .select_related("user", "flight")
-        .order_by(
+    if status not in ("pending", "checked_in", "closed"):
+        status = ""
+
+    sorting = {
+        "departure_asc": (
             "flight__departure_time",
             "seat_number",
             "pk",
-        )
+        ),
+        "departure_desc": (
+            "-flight__departure_time",
+            "seat_number",
+            "pk",
+        ),
+        "passenger": (
+            "user__username",
+            "flight__departure_time",
+            "pk",
+        ),
+    }
+
+    if sort not in sorting:
+        sort = "departure_asc"
+
+    now = timezone.now()
+
+    reservations = (
+        Reservation.objects.select_related("user", "flight")
     )
 
     if query:
@@ -47,13 +72,59 @@ def check_in_list(request):
             | Q(ticket_number__icontains=query)
         )
 
+    if status == "pending":
+        reservations = reservations.filter(
+            is_checked_in=False,
+            flight__departure_time__gt=now,
+        )
+
+    elif status == "checked_in":
+        reservations = reservations.filter(
+            is_checked_in=True,
+        )
+
+    elif status == "closed":
+        reservations = reservations.filter(
+            is_checked_in=False,
+            flight__departure_time__lte=now,
+        )
+
+    reservations = reservations.order_by(*sorting[sort])
+
+    page_obj = Paginator(
+        reservations,
+        5,
+    ).get_page(request.GET.get("page"))
+
+    params = {
+        "q": query,
+        "status": status,
+        "sort": sort if sort != "departure_asc" else "",
+    }
+
+    query_string = urlencode({
+        key: value
+        for key, value in params.items()
+        if value
+    })
+
+    page_prefix = (
+        f"?{query_string}&"
+        if query_string
+        else "?"
+    )
+
     return render(
         request,
         "flights/checkin_list.jinja",
         {
-            "reservations": reservations,
+            "reservations": page_obj,
+            "page_obj": page_obj,
             "query": query,
-            "now": timezone.now(),
+            "status_filter": status,
+            "sort_order": sort,
+            "page_prefix": page_prefix,
+            "now": now,
         },
         using="jinja2",
     )

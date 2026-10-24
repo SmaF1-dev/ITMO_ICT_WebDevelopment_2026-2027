@@ -9,16 +9,20 @@
         <p class="eyebrow">Панель сотрудника</p>
         <h1>Регистрация пассажиров</h1>
         <p class="subtitle">
-            Проверка бронирований и оформление регистрации на рейс.
+            Поиск бронирований и оформление регистрации на рейс.
         </p>
     </div>
 </section>
 
 <section class="panel">
-    <form method="get" class="checkin-search">
-        <div class="checkin-search-field">
+    <form
+        method="get"
+        action="{{ url('flights:check_in_list') }}"
+        class="filter-form"
+    >
+        <div class="filter-field filter-field-wide">
             <label for="reservation-search">
-                Найти бронирование
+                Поиск бронирования
             </label>
 
             <input
@@ -27,19 +31,79 @@
                 name="q"
                 value="{{ query }}"
                 maxlength="100"
-                placeholder="Номер рейса, логин, имя или номер билета"
+                placeholder="Рейс, логин, имя или номер билета"
             >
         </div>
 
-        <button class="primary-action" type="submit">
-            Найти
-        </button>
+        <div class="filter-field">
+            <label for="reservation-status">
+                Статус
+            </label>
 
-        {% if query %}
+            <select id="reservation-status" name="status">
+                <option value="">Все статусы</option>
+
+                <option
+                    value="pending"
+                    {% if status_filter == "pending" %}selected{% endif %}
+                >
+                    Ожидает регистрации
+                </option>
+
+                <option
+                    value="checked_in"
+                    {% if status_filter == "checked_in" %}selected{% endif %}
+                >
+                    Зарегистрирован
+                </option>
+
+                <option
+                    value="closed"
+                    {% if status_filter == "closed" %}selected{% endif %}
+                >
+                    Рейс отправился
+                </option>
+            </select>
+        </div>
+
+        <div class="filter-field">
+            <label for="reservation-sort">
+                Сортировка
+            </label>
+
+            <select id="reservation-sort" name="sort">
+                <option
+                    value="departure_asc"
+                    {% if sort_order == "departure_asc" %}selected{% endif %}
+                >
+                    По отправлению ↑
+                </option>
+
+                <option
+                    value="departure_desc"
+                    {% if sort_order == "departure_desc" %}selected{% endif %}
+                >
+                    По отправлению ↓
+                </option>
+
+                <option
+                    value="passenger"
+                    {% if sort_order == "passenger" %}selected{% endif %}
+                >
+                    По логину пассажира
+                </option>
+            </select>
+        </div>
+
+        <div class="filter-actions">
+            <button class="primary-action" type="submit">
+                Применить
+            </button>
+
             <a href="{{ url('flights:check_in_list') }}">
                 Сбросить
             </a>
-        {% endif %}
+        </div>
     </form>
 </section>
 
@@ -47,8 +111,14 @@
     <div class="panel-heading">
         <div>
             <h2>Бронирования</h2>
-            <p>Регистрация пассажиров через интерфейс сотрудника</p>
+            <p>
+                Регистрация пассажиров через интерфейс сотрудника
+            </p>
         </div>
+
+        <span class="counter">
+            Найдено: {{ page_obj.paginator.count }}
+        </span>
     </div>
 
     <div class="table-scroll">
@@ -77,7 +147,9 @@
                         </td>
 
                         <td>
-                            <strong>{{ reservation.user.username }}</strong>
+                            <strong>
+                                {{ reservation.user.username }}
+                            </strong>
                         </td>
 
                         <td>{{ reservation.seat_number }}</td>
@@ -91,10 +163,12 @@
                                 <span class="status status-arrival">
                                     Зарегистрирован
                                 </span>
+
                             {% elif reservation.flight.departure_time <= now %}
                                 <span class="status status-past">
                                     Рейс отправился
                                 </span>
+
                             {% else %}
                                 <span class="status status-departure">
                                     Ожидает регистрации
@@ -111,10 +185,12 @@
                                 <span class="muted-text">
                                     Завершено
                                 </span>
+
                             {% elif reservation.flight.departure_time <= now %}
                                 <span class="muted-text">
                                     Недоступно
                                 </span>
+
                             {% else %}
                                 <a
                                     class="details-link"
@@ -128,13 +204,50 @@
                 {% else %}
                     <tr>
                         <td colspan="7" class="empty-state">
-                            Бронирований по заданному запросу нет.
+                            Бронирования по заданным условиям
+                            не найдены.
                         </td>
                     </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
+
+    {% if page_obj.paginator.num_pages > 1 %}
+        <nav
+            class="pagination"
+            aria-label="Страницы бронирований"
+        >
+            <div class="pagination-links">
+                {% if page_obj.has_previous() %}
+                    <a href="{{ page_prefix }}page=1">
+                        Первая
+                    </a>
+
+                    <a href="{{ page_prefix }}page={{ page_obj.previous_page_number() }}">
+                        ← Назад
+                    </a>
+                {% endif %}
+            </div>
+
+            <span class="pagination-current">
+                Страница {{ page_obj.number }}
+                из {{ page_obj.paginator.num_pages }}
+            </span>
+
+            <div class="pagination-links">
+                {% if page_obj.has_next() %}
+                    <a href="{{ page_prefix }}page={{ page_obj.next_page_number() }}">
+                        Вперёд →
+                    </a>
+
+                    <a href="{{ page_prefix }}page={{ page_obj.paginator.num_pages }}">
+                        Последняя
+                    </a>
+                {% endif %}
+            </div>
+        </nav>
+    {% endif %}
 </section>
 
 {% endblock %}

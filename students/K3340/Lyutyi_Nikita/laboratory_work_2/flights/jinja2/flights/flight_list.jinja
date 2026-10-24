@@ -1,4 +1,3 @@
-
 {% extends "flights/base.jinja" %}
 
 {% block title %}Табло авиарейсов{% endblock %}
@@ -10,11 +9,98 @@
         <p class="eyebrow">Информация об авиаперелётах</p>
         <h1>Табло авиарейсов</h1>
         <p class="subtitle">
-            Актуальные записи из базы данных PostgreSQL.
+            Поиск и расписание рейсов.
         </p>
     </div>
 
     <div class="heading-icon" aria-hidden="true">✈</div>
+</section>
+
+<section class="panel">
+    <form
+        method="get"
+        action="{{ url('flights:flight_list') }}"
+        class="filter-form"
+    >
+        <div class="filter-field filter-field-wide">
+            <label for="flight-search">Поиск рейса</label>
+
+            <input
+                id="flight-search"
+                name="q"
+                type="search"
+                maxlength="100"
+                value="{{ search_query }}"
+                placeholder="Номер, авиакомпания или аэропорт"
+            >
+        </div>
+
+        <div class="filter-field">
+            <label for="flight-type">Тип рейса</label>
+
+            <select id="flight-type" name="type">
+                <option value="">Все рейсы</option>
+
+                <option
+                    value="departure"
+                    {% if type_filter == "departure" %}selected{% endif %}
+                >
+                    Отправления
+                </option>
+
+                <option
+                    value="arrival"
+                    {% if type_filter == "arrival" %}selected{% endif %}
+                >
+                    Прибытия
+                </option>
+            </select>
+        </div>
+
+        <div class="filter-field">
+            <label for="flight-sort">Сортировка</label>
+
+            <select id="flight-sort" name="sort">
+                <option
+                    value="departure_asc"
+                    {% if sort_order == "departure_asc" %}selected{% endif %}
+                >
+                    По отправлению ↑
+                </option>
+
+                <option
+                    value="departure_desc"
+                    {% if sort_order == "departure_desc" %}selected{% endif %}
+                >
+                    По отправлению ↓
+                </option>
+
+                <option
+                    value="airline"
+                    {% if sort_order == "airline" %}selected{% endif %}
+                >
+                    По авиакомпании
+                </option>
+
+                <option
+                    value="free_desc"
+                    {% if sort_order == "free_desc" %}selected{% endif %}
+                >
+                    По свободным местам ↓
+                </option>
+            </select>
+        </div>
+
+        <div class="filter-actions">
+            <button type="submit" class="primary-action">
+                Применить
+            </button>
+
+            <a href="{{ url('flights:flight_list') }}">
+                Сбросить
+            </a>
+        </div>
+    </form>
 </section>
 
 <section class="panel">
@@ -25,7 +111,7 @@
         </div>
 
         <span class="counter">
-            {{ flights|length }} рейсов
+            Найдено: {{ paginator.count }}
         </span>
     </div>
 
@@ -40,8 +126,8 @@
                     <th>Прибытие</th>
                     <th>Тип</th>
                     <th>Выход</th>
-                    <th>Свободно мест</th>
-                    <th></th>
+                    <th>Свободные места</th>
+                    <th>Действия</th>
                 </tr>
             </thead>
 
@@ -82,9 +168,7 @@
                             {% endif %}
                         </td>
 
-                        <td>
-                            {{ flight.gate or "—" }}
-                        </td>
+                        <td>{{ flight.gate or "—" }}</td>
 
                         <td>
                             <strong>{{ flight.free_seats }}</strong>
@@ -103,13 +187,49 @@
                 {% else %}
                     <tr>
                         <td colspan="9" class="empty-state">
-                            Авиарейсы пока не добавлены.
+                            По выбранным условиям рейсы не найдены.
                         </td>
                     </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
+
+    {% if is_paginated %}
+        <nav
+            class="pagination"
+            aria-label="Страницы табло"
+        >
+            <div class="pagination-links">
+                {% if page_obj.has_previous() %}
+                    <a href="{{ page_prefix }}page=1">
+                        Первая
+                    </a>
+
+                    <a href="{{ page_prefix }}page={{ page_obj.previous_page_number() }}">
+                        ← Назад
+                    </a>
+                {% endif %}
+            </div>
+
+            <span class="pagination-current">
+                Страница {{ page_obj.number }}
+                из {{ page_obj.paginator.num_pages }}
+            </span>
+
+            <div class="pagination-links">
+                {% if page_obj.has_next() %}
+                    <a href="{{ page_prefix }}page={{ page_obj.next_page_number() }}">
+                        Вперёд →
+                    </a>
+
+                    <a href="{{ page_prefix }}page={{ page_obj.paginator.num_pages }}">
+                        Последняя
+                    </a>
+                {% endif %}
+            </div>
+        </nav>
+    {% endif %}
 </section>
 
 {% endblock %}

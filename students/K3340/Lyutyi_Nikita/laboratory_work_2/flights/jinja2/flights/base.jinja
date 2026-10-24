@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>{% block title %}Табло авиарейсов{% endblock %}</title>
+    <title>
+        {% block title %}Табло авиарейсов{% endblock %}
+    </title>
 
     <link
         rel="stylesheet"
@@ -25,16 +27,27 @@
         rel="stylesheet"
         href="{{ static('flights/css/checkin.css') }}"
     >
+
+    <link
+        rel="stylesheet"
+        href="{{ static('flights/css/filters.css') }}"
+    >
 </head>
 <body>
     <header class="site-header">
         <div class="header-inner">
-            <a class="logo" href="{{ url('flights:flight_list') }}">
+            <a
+                class="logo"
+                href="{{ url('flights:flight_list') }}"
+            >
                 <span class="logo-icon">✈</span>
                 FlightBoard
             </a>
 
-            <nav class="navigation" aria-label="Основная навигация">
+            <nav
+                class="navigation"
+                aria-label="Основная навигация"
+            >
                 <a href="{{ url('flights:flight_list') }}">
                     Рейсы
                 </a>
@@ -72,7 +85,10 @@
                     >
                         {{ csrf_input }}
 
-                        <button class="logout-button" type="submit">
+                        <button
+                            class="logout-button"
+                            type="submit"
+                        >
                             Выйти
                         </button>
                     </form>

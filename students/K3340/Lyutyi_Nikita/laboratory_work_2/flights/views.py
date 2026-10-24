@@ -1,7 +1,8 @@
+from urllib.parse import urlencode
 
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError, transaction
-from django.db.models import Count, F
+from django.db.models import Count, F, Q
 from django.http import HttpResponseForbidden
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
@@ -12,7 +13,7 @@ from .models import Flight, Reservation
 
 
 def flights_with_availability():
-    """Рейсы с количеством занятых и свободных мест."""
+    """Рейсы с подсчётом занятых и свободных мест."""
     return Flight.objects.annotate(
         reserved_seats=Count("reservations"),
         free_seats=F("seat_capacity") - Count("reservations"),
@@ -20,21 +21,82 @@ def flights_with_availability():
 
 
 class FlightListView(ListView):
-    """Табло авиарейсов."""
+    """Табло с поиском, фильтрацией, сортировкой и пагинацией."""
 
     template_engine = "jinja2"
     template_name = "flights/flight_list.jinja"
     context_object_name = "flights"
+    paginate_by = 3
 
     def get_queryset(self):
-        return flights_with_availability().order_by(
-            "departure_time",
-            "flight_number",
-        )
+        query = self.request.GET.get("q", "").strip()[:100]
+        flight_type = self.request.GET.get("type", "")
+        sort = self.request.GET.get("sort", "departure_asc")
+
+        if flight_type not in ("arrival", "departure"):
+            flight_type = ""
+
+        sorting = {
+            "departure_asc": ("departure_time", "pk"),
+            "departure_desc": ("-departure_time", "-pk"),
+            "airline": ("airline", "departure_time", "pk"),
+            "free_desc": ("-free_seats", "departure_time", "pk"),
+        }
+
+        if sort not in sorting:
+            sort = "departure_asc"
+
+        self.filters = {
+            "q": query,
+            "type": flight_type,
+            "sort": sort,
+        }
+
+        flights = flights_with_availability()
+
+        if query:
+            flights = flights.filter(
+                Q(flight_number__icontains=query)
+                | Q(airline__icontains=query)
+                | Q(departure_airport__icontains=query)
+                | Q(arrival_airport__icontains=query)
+            )
+
+        if flight_type:
+            flights = flights.filter(flight_type=flight_type)
+
+        return flights.order_by(*sorting[sort])
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
         context["now"] = timezone.now()
+        context["search_query"] = self.filters["q"]
+        context["type_filter"] = self.filters["type"]
+        context["sort_order"] = self.filters["sort"]
+
+        params = {
+            "q": self.filters["q"],
+            "type": self.filters["type"],
+            "sort": (
+                self.filters["sort"]
+                if self.filters["sort"] != "departure_asc"
+                else ""
+            ),
+        }
+
+        query_string = urlencode({
+            key: value
+            for key, value in params.items()
+            if value
+        })
+
+        context["page_prefix"] = (
+            f"?{query_string}&"
+            if query_string
+            else "?"
+        )
+
         return context
 
 
@@ -164,8 +226,10 @@ def reservation_update(request, pk):
     if request.method == "POST":
         try:
             with transaction.atomic():
-                locked_flight = Flight.objects.select_for_update().get(
-                    pk=reservation.flight_id
+                locked_flight = (
+                    Flight.objects.select_for_update().get(
+                        pk=reservation.flight_id
+                    )
                 )
 
                 locked_reservation = get_object_or_404(
@@ -234,8 +298,10 @@ def reservation_delete(request, pk):
 
     if request.method == "POST":
         with transaction.atomic():
-            locked_flight = Flight.objects.select_for_update().get(
-                pk=reservation.flight_id
+            locked_flight = (
+                Flight.objects.select_for_update().get(
+                    pk=reservation.flight_id
+                )
             )
 
             locked_reservation = get_object_or_404(
