@@ -1,4 +1,3 @@
-
 {% extends "flights/base.jinja" %}
 
 {% block title %}
@@ -38,7 +37,9 @@
         <div class="route-point">
             <span class="route-label">Откуда</span>
             <strong>{{ flight.departure_airport }}</strong>
-            <span>{{ datetime_local(flight.departure_time) }}</span>
+            <span>
+                {{ datetime_local(flight.departure_time) }}
+            </span>
         </div>
 
         <div class="route-divider">✈</div>
@@ -46,7 +47,9 @@
         <div class="route-point">
             <span class="route-label">Куда</span>
             <strong>{{ flight.arrival_airport }}</strong>
-            <span>{{ datetime_local(flight.arrival_time) }}</span>
+            <span>
+                {{ datetime_local(flight.arrival_time) }}
+            </span>
         </div>
     </div>
 </section>
@@ -118,5 +121,112 @@
         {% endif %}
     </section>
 </div>
+
+<section class="panel reviews-section">
+    <div class="reviews-heading">
+        <div>
+            <h2>Отзывы о рейсе</h2>
+
+            {% if review_stats.count > 0 %}
+                <p class="reviews-summary">
+                    Средняя оценка:
+                    <strong>
+                        {{ "%.1f"|format(review_stats.average) }} / 10
+                    </strong>
+                    · Отзывов: {{ review_stats.count }}
+                </p>
+            {% else %}
+                <p class="reviews-summary">
+                    Пока нет опубликованных отзывов.
+                </p>
+            {% endif %}
+        </div>
+
+        {% if flight.arrival_time <= now %}
+            {% if request.user.is_authenticated %}
+                {% if my_review %}
+                    <a
+                        class="primary-action"
+                        href="{{ url('flights:review_update', pk=my_review.pk) }}"
+                    >
+                        Изменить мой отзыв
+                    </a>
+                {% else %}
+                    <a
+                        class="primary-action"
+                        href="{{ url('flights:review_create', pk=flight.pk) }}"
+                    >
+                        Оставить отзыв
+                    </a>
+                {% endif %}
+            {% else %}
+                <a
+                    class="primary-action"
+                    href="{{ url('accounts:login') }}?next={{ url('flights:review_create', pk=flight.pk) }}"
+                >
+                    Войти и оставить отзыв
+                </a>
+            {% endif %}
+        {% else %}
+            <span class="muted-text">
+                Оценить рейс можно после прибытия
+            </span>
+        {% endif %}
+    </div>
+
+    {% for review in reviews %}
+        <article class="review-item">
+            <div class="review-top">
+                <div>
+                    <strong>{{ review.author.username }}</strong>
+
+                    <span class="review-author-id">
+                        ID автора: {{ review.author_id }}
+                    </span>
+                </div>
+
+                <span class="review-rating">
+                    {{ review.rating }} / 10
+                </span>
+            </div>
+
+            <p class="review-body">{{ review.text }}</p>
+
+            <div class="review-bottom">
+                <span class="review-date">
+                    Дата рейса:
+                    {{ review.flight_date.strftime("%d.%m.%Y") }}
+                </span>
+
+                <span class="review-date">
+                    Опубликован:
+                    {{ datetime_local(review.created_at) }}
+                </span>
+            </div>
+
+            {% if request.user.is_authenticated
+                  and request.user.pk == review.author_id %}
+                <div class="review-actions">
+                    <a
+                        href="{{ url('flights:review_update', pk=review.pk) }}"
+                    >
+                        Редактировать
+                    </a>
+
+                    <a
+                        href="{{ url('flights:review_delete', pk=review.pk) }}"
+                    >
+                        Удалить
+                    </a>
+                </div>
+            {% endif %}
+        </article>
+    {% else %}
+        <p class="muted-text">
+            Станьте первым, кто поделится впечатлениями
+            об этом рейсе.
+        </p>
+    {% endfor %}
+</section>
 
 {% endblock %}

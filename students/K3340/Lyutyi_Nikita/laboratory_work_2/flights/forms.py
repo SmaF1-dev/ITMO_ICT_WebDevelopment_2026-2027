@@ -1,7 +1,6 @@
-
 from django import forms
 
-from .models import Reservation
+from .models import Reservation, Review
 
 
 class ReservationSeatForm(forms.ModelForm):
@@ -46,5 +45,43 @@ class ReservationSeatForm(forms.ModelForm):
 
         self.fields["seat_number"].choices = [
             ("", "Выберите свободное место"),
-            *[(number, f"Место {number}") for number in available],
+            *[
+                (number, f"Место {number}")
+                for number in available
+            ],
         ]
+
+
+class ReviewForm(forms.ModelForm):
+    """Форма создания и редактирования отзыва о рейсе."""
+
+    rating = forms.TypedChoiceField(
+        label="Оценка",
+        coerce=int,
+        choices=[
+            ("", "Выберите оценку"),
+            *[
+                (score, f"{score} / 10")
+                for score in range(1, 11)
+            ],
+        ],
+    )
+
+    class Meta:
+        model = Review
+        fields = ("rating", "text")
+
+        labels = {
+            "text": "Текст отзыва",
+        }
+
+        widgets = {
+            "text": forms.Textarea(
+                attrs={
+                    "rows": 5,
+                    "placeholder": (
+                        "Расскажите о впечатлениях от рейса..."
+                    ),
+                }
+            ),
+        }
