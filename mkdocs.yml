@@ -1,4 +1,6 @@
 site_name: Веб-программирование — Лютый Никита, K3340
+site_description: Лабораторные работы №1 и №2 по веб-программированию, ИТМО
+site_author: Лютый Никита
 
 theme:
   name: material
@@ -7,6 +9,7 @@ theme:
 nav:
   - Главная: index.md
   - Лабораторная работа №1: lr1/report.md
+  - Лабораторная работа №2: lr2/report.md
 
 markdown_extensions:
   - admonition
