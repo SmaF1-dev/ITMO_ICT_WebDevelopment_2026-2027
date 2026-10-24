@@ -1,3 +1,4 @@
+
 {% extends "flights/base.jinja" %}
 
 {% block title %}Регистрация пассажиров{% endblock %}
@@ -230,10 +231,7 @@
                 {% endif %}
             </div>
 
-            <span class="pagination-current">
-                Страница {{ page_obj.number }}
-                из {{ page_obj.paginator.num_pages }}
-            </span>
+            <span class="pagination-current">Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}</span>
 
             <div class="pagination-links">
                 {% if page_obj.has_next() %}

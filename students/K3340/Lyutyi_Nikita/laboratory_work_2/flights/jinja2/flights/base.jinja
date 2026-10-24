@@ -1,12 +1,12 @@
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#ffffff">
 
-    <title>
-        {% block title %}Табло авиарейсов{% endblock %}
-    </title>
+    <title>{% block title %}Табло авиарейсов{% endblock %}</title>
 
     <link
         rel="stylesheet"
@@ -32,6 +32,11 @@
         rel="stylesheet"
         href="{{ static('flights/css/filters.css') }}"
     >
+
+    <link
+        rel="stylesheet"
+        href="{{ static('flights/css/polish.css') }}"
+    >
 </head>
 <body>
     <header class="site-header">
@@ -39,8 +44,9 @@
             <a
                 class="logo"
                 href="{{ url('flights:flight_list') }}"
+                aria-label="FlightBoard — главная страница"
             >
-                <span class="logo-icon">✈</span>
+                <span class="logo-icon" aria-hidden="true">✈</span>
                 FlightBoard
             </a>
 
@@ -108,7 +114,7 @@
         </div>
     </header>
 
-    <main class="page-container">
+    <main id="main-content" class="page-container">
         {% block content %}{% endblock %}
     </main>
 
