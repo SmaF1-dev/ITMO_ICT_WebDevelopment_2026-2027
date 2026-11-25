@@ -1,0 +1,56 @@
+{% extends "flights/base.jinja" %}
+
+{% block title %}Удаление отзыва{% endblock %}
+
+{% block content %}
+
+<a
+    class="back-link"
+    href="{{ url('flights:flight_detail', pk=review.flight.pk) }}"
+>
+    ← К информации о рейсе
+</a>
+
+<section class="page-heading">
+    <div>
+        <p class="eyebrow">Отзывы</p>
+        <h1>Удаление отзыва</h1>
+        <p class="subtitle">
+            Подтвердите удаление опубликованного отзыва.
+        </p>
+    </div>
+</section>
+
+<section class="panel review-form-card">
+    <h2>Рейс {{ review.flight.flight_number }}</h2>
+
+    <p class="review-intro">
+        {{ review.flight.airline }}
+    </p>
+
+    <div class="review-preview">
+        <strong>Оценка: {{ review.rating }} / 10</strong>
+        <p>{{ review.text }}</p>
+    </div>
+
+    <p class="cancellation-warning">
+        Вы действительно хотите удалить этот отзыв?
+        Действие нельзя отменить.
+    </p>
+
+    <form method="post" class="review-form-actions">
+        {{ csrf_input }}
+
+        <button class="danger-action" type="submit">
+            Удалить отзыв
+        </button>
+
+        <a
+            href="{{ url('flights:flight_detail', pk=review.flight.pk) }}"
+        >
+            Оставить отзыв
+        </a>
+    </form>
+</section>
+
+{% endblock %}

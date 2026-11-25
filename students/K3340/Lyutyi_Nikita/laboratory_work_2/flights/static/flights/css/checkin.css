@@ -1,0 +1,76 @@
+.checkin-search {
+    display: flex;
+    align-items: end;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.checkin-search-field {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 240px;
+}
+
+.checkin-search-field label {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.checkin-search-field input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #cbd5e1;
+    border-radius: 9px;
+    background: #fff;
+    color: #172033;
+    font: inherit;
+}
+
+.checkin-search-field input:focus {
+    outline: 2px solid #93c5fd;
+    border-color: #2563eb;
+}
+
+.checkin-search .primary-action {
+    white-space: nowrap;
+}
+
+.checkin-search > a {
+    padding: 11px 0;
+}
+
+.checkin-card {
+    max-width: 680px;
+}
+
+.checkin-card .flight-details {
+    margin-bottom: 8px;
+}
+
+.checkin-description {
+    margin-top: 14px;
+    color: #64748b;
+    line-height: 1.6;
+}
+
+.checkin-form {
+    margin-top: 28px;
+}
+
+@media (max-width: 600px) {
+    .checkin-search {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .checkin-search-field {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .checkin-search .primary-action {
+        text-align: center;
+    }
+}

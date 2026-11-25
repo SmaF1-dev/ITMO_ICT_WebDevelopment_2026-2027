@@ -1,0 +1,283 @@
+{% extends "flights/base.jinja" %}
+
+{% block title %}
+    {{ flight.flight_number }} — Информация о рейсе
+{% endblock %}
+
+{% block content %}
+
+<a class="back-link" href="{{ url('flights:flight_list') }}">
+    ← Назад к табло
+</a>
+
+<section class="page-heading detail-heading">
+    <div>
+        <p class="eyebrow">Подробная информация</p>
+        <h1>Рейс {{ flight.flight_number }}</h1>
+        <p class="subtitle">{{ flight.airline }}</p>
+    </div>
+
+    {% if flight.departure_time < now %}
+        <span class="status status-past">
+            Время отправления прошло
+        </span>
+    {% elif flight.flight_type == "departure" %}
+        <span class="status status-departure">
+            Отправление
+        </span>
+    {% else %}
+        <span class="status status-arrival">
+            Прибытие
+        </span>
+    {% endif %}
+</section>
+
+<section class="panel">
+    <div class="route-overview">
+        <div class="route-point">
+            <span class="route-label">Откуда</span>
+            <strong>{{ flight.departure_airport }}</strong>
+            <span>
+                {{ datetime_local(flight.departure_time) }}
+            </span>
+        </div>
+
+        <div class="route-divider">✈</div>
+
+        <div class="route-point">
+            <span class="route-label">Куда</span>
+            <strong>{{ flight.arrival_airport }}</strong>
+            <span>
+                {{ datetime_local(flight.arrival_time) }}
+            </span>
+        </div>
+    </div>
+</section>
+
+<div class="details-grid">
+    <section class="panel">
+        <h2>Информация о рейсе</h2>
+
+        <dl class="flight-details">
+            <dt>Номер рейса</dt>
+            <dd>{{ flight.flight_number }}</dd>
+
+            <dt>Авиакомпания</dt>
+            <dd>{{ flight.airline }}</dd>
+
+            <dt>Тип рейса</dt>
+            <dd>{{ flight.get_flight_type_display() }}</dd>
+
+            <dt>Выход на посадку</dt>
+            <dd>{{ flight.gate or "Не назначен" }}</dd>
+        </dl>
+    </section>
+
+    <section class="panel">
+        <h2>Информация о местах</h2>
+
+        <div class="seats-number">
+            {{ flight.free_seats }}
+        </div>
+
+        <p class="seats-caption">Свободно мест</p>
+
+        <dl class="flight-details">
+            <dt>Всего мест</dt>
+            <dd>{{ flight.seat_capacity }}</dd>
+
+            <dt>Забронировано</dt>
+            <dd>{{ flight.reserved_seats }}</dd>
+
+            <dt>Свободно</dt>
+            <dd>{{ flight.free_seats }}</dd>
+        </dl>
+
+        {% if flight.departure_time <= now %}
+            <p class="notice">
+                Бронирование закрыто: время отправления прошло.
+            </p>
+
+        {% elif flight.free_seats == 0 %}
+            <p class="notice">
+                На этом рейсе не осталось свободных мест.
+            </p>
+
+        {% else %}
+            <div class="reservation-action">
+                <a
+                    class="primary-action"
+                    href="{{ url('flights:reservation_create', pk=flight.pk) }}"
+                >
+                    Забронировать место
+                </a>
+
+                {% if not request.user.is_authenticated %}
+                    <p class="action-hint">
+                        Для бронирования потребуется войти в аккаунт.
+                    </p>
+                {% endif %}
+            </div>
+        {% endif %}
+    </section>
+</div>
+
+<section class="panel">
+    <div class="panel-heading">
+        <div>
+            <h2>Пассажиры рейса</h2>
+            <p>
+                Список забронированных мест и статусов регистрации.
+            </p>
+        </div>
+    </div>
+
+    <div class="table-scroll">
+        <table class="flights-table">
+            <thead>
+                <tr>
+                    <th>Пассажир</th>
+                    <th>Номер места</th>
+                    <th>Статус</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for passenger in passengers %}
+                    <tr>
+                        <td>{{ passenger.user.username }}</td>
+
+                        <td>{{ passenger.seat_number }}</td>
+
+                        <td>
+                            {% if passenger.is_checked_in %}
+                                <span class="status status-arrival">
+                                    Зарегистрирован
+                                </span>
+                            {% else %}
+                                <span class="status status-departure">
+                                    Забронирован
+                                </span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="3" class="empty-state">
+                            Бронирований на этот рейс пока нет.
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<section class="panel reviews-section">
+    <div class="reviews-heading">
+        <div>
+            <h2>Отзывы о рейсе</h2>
+
+            {% if review_stats.count > 0 %}
+                <p class="reviews-summary">
+                    Средняя оценка:
+                    <strong>
+                        {{ "%.1f"|format(review_stats.average) }} / 10
+                    </strong>
+                    · Отзывов: {{ review_stats.count }}
+                </p>
+            {% else %}
+                <p class="reviews-summary">
+                    Пока нет опубликованных отзывов.
+                </p>
+            {% endif %}
+        </div>
+
+        {% if flight.arrival_time <= now %}
+            {% if request.user.is_authenticated %}
+                {% if my_review %}
+                    <a
+                        class="primary-action"
+                        href="{{ url('flights:review_update', pk=my_review.pk) }}"
+                    >
+                        Изменить мой отзыв
+                    </a>
+                {% else %}
+                    <a
+                        class="primary-action"
+                        href="{{ url('flights:review_create', pk=flight.pk) }}"
+                    >
+                        Оставить отзыв
+                    </a>
+                {% endif %}
+            {% else %}
+                <a
+                    class="primary-action"
+                    href="{{ url('accounts:login') }}?next={{ url('flights:review_create', pk=flight.pk) }}"
+                >
+                    Войти и оставить отзыв
+                </a>
+            {% endif %}
+        {% else %}
+            <span class="muted-text">
+                Оценить рейс можно после прибытия
+            </span>
+        {% endif %}
+    </div>
+
+    {% for review in reviews %}
+        <article class="review-item">
+            <div class="review-top">
+                <div>
+                    <strong>{{ review.author.username }}</strong>
+
+                    <span class="review-author-id">
+                        ID автора: {{ review.author_id }}
+                    </span>
+                </div>
+
+                <span class="review-rating">
+                    {{ review.rating }} / 10
+                </span>
+            </div>
+
+            <p class="review-body">{{ review.text }}</p>
+
+            <div class="review-bottom">
+                <span class="review-date">
+                    Дата рейса:
+                    {{ review.flight_date.strftime("%d.%m.%Y") }}
+                </span>
+
+                <span class="review-date">
+                    Опубликован:
+                    {{ datetime_local(review.created_at) }}
+                </span>
+            </div>
+
+            {% if request.user.is_authenticated
+                  and request.user.pk == review.author_id %}
+                <div class="review-actions">
+                    <a
+                        href="{{ url('flights:review_update', pk=review.pk) }}"
+                    >
+                        Редактировать
+                    </a>
+
+                    <a
+                        href="{{ url('flights:review_delete', pk=review.pk) }}"
+                    >
+                        Удалить
+                    </a>
+                </div>
+            {% endif %}
+        </article>
+    {% else %}
+        <p class="muted-text">
+            Станьте первым, кто поделится впечатлениями
+            об этом рейсе.
+        </p>
+    {% endfor %}
+</section>
+
+{% endblock %}

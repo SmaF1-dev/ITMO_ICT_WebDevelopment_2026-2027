@@ -1,0 +1,56 @@
+
+{% extends "flights/base.jinja" %}
+
+{% block title %}Отмена бронирования{% endblock %}
+
+{% block content %}
+
+<a class="back-link" href="{{ url('flights:my_reservations') }}">
+    ← К моим бронированиям
+</a>
+
+<section class="page-heading">
+    <div>
+        <p class="eyebrow">Бронирование</p>
+        <h1>Отмена бронирования</h1>
+        <p class="subtitle">
+            Подтвердите освобождение места.
+        </p>
+    </div>
+</section>
+
+<section class="panel reservation-card">
+    <h2>Рейс {{ reservation.flight.flight_number }}</h2>
+
+    <dl class="flight-details">
+        <dt>Авиакомпания</dt>
+        <dd>{{ reservation.flight.airline }}</dd>
+
+        <dt>Отправление</dt>
+        <dd>
+            {{ datetime_local(reservation.flight.departure_time) }}
+        </dd>
+
+        <dt>Номер места</dt>
+        <dd>{{ reservation.seat_number }}</dd>
+    </dl>
+
+    <p class="cancellation-warning">
+        Вы действительно хотите отменить бронирование?
+        После отмены место станет доступным другим пассажирам.
+    </p>
+
+    <form method="post" class="reservation-actions">
+        {{ csrf_input }}
+
+        <button class="danger-action" type="submit">
+            Отменить бронирование
+        </button>
+
+        <a href="{{ url('flights:my_reservations') }}">
+            Оставить бронирование
+        </a>
+    </form>
+</section>
+
+{% endblock %}

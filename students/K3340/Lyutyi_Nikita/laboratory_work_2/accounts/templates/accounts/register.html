@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}Регистрация{% endblock %}
+
+{% block content %}
+
+<header class="page-header">
+    <p class="eyebrow">Учётная запись</p>
+    <h1>Регистрация</h1>
+    <p>Создайте аккаунт для работы с веб-приложением.</p>
+</header>
+
+<section class="card form-card auth-card">
+    <form method="post">
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+            <div class="form-error">
+                {{ form.non_field_errors }}
+            </div>
+        {% endif %}
+
+        {% for field in form %}
+            <div class="auth-field">
+                <label for="{{ field.id_for_label }}">
+                    {{ field.label }}
+                </label>
+
+                {{ field }}
+
+                {% if field.errors %}
+                    <div class="field-errors">
+                        {{ field.errors }}
+                    </div>
+                {% endif %}
+
+                {% if field.help_text %}
+                    <p class="field-help">
+                        {{ field.help_text }}
+                    </p>
+                {% endif %}
+            </div>
+        {% endfor %}
+
+        <button class="button" type="submit">
+            Зарегистрироваться
+        </button>
+    </form>
+
+    <p class="auth-footer">
+        Уже есть аккаунт?
+
+        <a href="{% url 'accounts:login' %}">
+            Войти
+        </a>
+    </p>
+</section>
+
+{% endblock %}

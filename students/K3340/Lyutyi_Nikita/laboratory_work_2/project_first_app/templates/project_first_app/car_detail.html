@@ -1,0 +1,88 @@
+{% extends "project_first_app/base.html" %}
+
+{% block title %}{{ car }}{% endblock %}
+
+{% block content %}
+
+<header class="page-header">
+    <p class="eyebrow">Практическая работа 2.2</p>
+    <h1>{{ car.brand }} {{ car.model }}</h1>
+    <p>Подробная информация об автомобиле.</p>
+</header>
+
+<section class="card">
+    <div class="section-heading">
+        <h2>Характеристики</h2>
+
+        {% if user.is_staff %}
+            <a class="button" href="{% url 'project_first_app:car_update' car.pk %}">
+                Редактировать
+            </a>
+        {% endif %}
+    </div>
+
+    <dl class="details">
+        <dt>ID</dt>
+        <dd>{{ car.id }}</dd>
+
+        <dt>Марка</dt>
+        <dd>{{ car.brand }}</dd>
+
+        <dt>Модель</dt>
+        <dd>{{ car.model }}</dd>
+
+        <dt>Госномер</dt>
+        <dd>{{ car.registration_number }}</dd>
+
+        <dt>Цвет</dt>
+        <dd>{{ car.get_color_display }}</dd>
+    </dl>
+</section>
+
+<section class="card">
+    <h2>История владения</h2>
+
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>Владелец</th>
+                    <th>Начало</th>
+                    <th>Окончание</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for ownership in ownerships %}
+                    <tr>
+                        <td>
+                            <a href="{% url 'project_first_app:owner_detail' ownership.owner.id %}">
+                                {{ ownership.owner }}
+                            </a>
+                        </td>
+
+                        <td>{{ ownership.start_date|date:"d.m.Y" }}</td>
+
+                        <td>
+                            {% if ownership.end_date %}
+                                {{ ownership.end_date|date:"d.m.Y" }}
+                            {% else %}
+                                По настоящее время
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="3">История владения отсутствует.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<a class="back-link" href="{% url 'project_first_app:car_list' %}">
+    ← К списку автомобилей
+</a>
+
+{% endblock %}

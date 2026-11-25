@@ -1,0 +1,86 @@
+
+{% extends "flights/base.jinja" %}
+
+{% block title %}
+    {% if editing %}
+        Изменение бронирования
+    {% else %}
+        Бронирование места
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+
+<a class="back-link" href="{{ url('flights:flight_detail', pk=flight.pk) }}">
+    ← К информации о рейсе
+</a>
+
+<section class="page-heading">
+    <div>
+        <p class="eyebrow">Бронирование</p>
+
+        {% if editing %}
+            <h1>Изменение места</h1>
+        {% else %}
+            <h1>Бронирование места</h1>
+        {% endif %}
+
+        <p class="subtitle">
+            Рейс {{ flight.flight_number }} · {{ flight.airline }}
+        </p>
+    </div>
+</section>
+
+<section class="panel reservation-card">
+    <h2>Выберите место</h2>
+
+    <p class="reservation-description">
+        {{ flight.departure_airport }}
+        →
+        {{ flight.arrival_airport }}
+    </p>
+
+    <p class="reservation-description">
+        Отправление: {{ datetime_local(flight.departure_time) }}
+    </p>
+
+    <form method="post" class="reservation-form">
+        {{ csrf_input }}
+
+        {% for error in form.non_field_errors() %}
+            <p class="form-error">{{ error }}</p>
+        {% endfor %}
+
+        <div class="form-field">
+            <label for="{{ form.seat_number.id_for_label }}">
+                {{ form.seat_number.label }}
+            </label>
+
+            {{ form.seat_number }}
+
+            {% for error in form.seat_number.errors %}
+                <p class="form-error">{{ error }}</p>
+            {% endfor %}
+
+            <p class="field-hint">
+                В списке отображаются только свободные места.
+            </p>
+        </div>
+
+        <div class="reservation-actions">
+            <button class="primary-action" type="submit">
+                {% if editing %}
+                    Сохранить изменения
+                {% else %}
+                    Подтвердить бронирование
+                {% endif %}
+            </button>
+
+            <a href="{{ url('flights:my_reservations') }}">
+                Отмена
+            </a>
+        </div>
+    </form>
+</section>
+
+{% endblock %}
