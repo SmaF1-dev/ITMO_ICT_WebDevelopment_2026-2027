@@ -1,0 +1,990 @@
+
+<!doctype html>
+<html lang="ru" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../../lr2/report/">
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.2">
+    
+    
+      
+        <title>Лабораторная работа №3 - Веб-программирование — Лютый Никита, K3340</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.57a0d79d.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#no3-rest-api" class="md-skip">
+          Перейти к содержанию
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Верхний колонтитул">
+    <a href="../.." title="Веб-программирование — Лютый Никита, K3340" class="md-header__button md-logo" aria-label="Веб-программирование — Лютый Никита, K3340" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Веб-программирование — Лютый Никита, K3340
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Лабораторная работа №3
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Поиск" placeholder="Поиск" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Поиск">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Очистить" aria-label="Очистить" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Инициализация поиска
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Навигация" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Веб-программирование — Лютый Никита, K3340" class="md-nav__button md-logo" aria-label="Веб-программирование — Лютый Никита, K3340" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Веб-программирование — Лютый Никита, K3340
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Главная
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../lr1/report/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Лабораторная работа №1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../lr2/report/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Лабораторная работа №2
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Лабораторная работа №3
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Лабораторная работа №3
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Содержание">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Содержание
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Цель работы
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Используемые технологии
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Архитектура приложения
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Модель данных
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Основные операции и бизнес-правила
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rest-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Реализованный REST API
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Реализованный REST API">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Интерактивная документация
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#no8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Аналитические запросы варианта №8
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#31-django-orm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Практическая работа 3.1 — запросы Django ORM
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#32-django-rest-framework" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Практическая работа 3.2 — Django REST Framework
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Проверка основной лабораторной
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Вывод
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Содержание">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Содержание
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Цель работы
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Используемые технологии
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Архитектура приложения
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Модель данных
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Основные операции и бизнес-правила
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rest-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Реализованный REST API
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Реализованный REST API">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Интерактивная документация
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#no8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Аналитические запросы варианта №8
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#31-django-orm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Практическая работа 3.1 — запросы Django ORM
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#32-django-rest-framework" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Практическая работа 3.2 — Django REST Framework
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Проверка основной лабораторной
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Вывод
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="no3-rest-api">Лабораторная работа №3. Разработка REST API рекламного агентства «Луч»</h1>
+<p><strong>Выполнил:</strong> Лютый Никита, группа К3340, Университет ИТМО.<br />
+<strong>Вариант:</strong> №8 — рекламное агентство «Луч».</p>
+<h2 id="_1">Цель работы</h2>
+<p>В рамках лабораторной работы я разработал серверную часть информационной системы рекламного агентства с использованием Django, Django REST Framework, Djoser и PostgreSQL. Сервис предназначен для учёта рекламодателей, заявок, услуг, исполнителей, материалов, договоров и платёжных поручений. Также реализованы REST API, проверка бизнес-правил и аналитические запросы по варианту задания.</p>
+<h2 id="_2">Используемые технологии</h2>
+<ul>
+<li><strong>Python 3.13, Django 5.2</strong> — серверное приложение, модели и запросы к базе данных;</li>
+<li><strong>Django REST Framework</strong> — REST API, сериализаторы, представления и управление доступом;</li>
+<li><strong>Djoser и TokenAuthentication</strong> — регистрация пользователей и авторизация по токенам;</li>
+<li><strong>PostgreSQL 16</strong> — основная реляционная база данных;</li>
+<li><strong>Docker Compose</strong> — локальный запуск PostgreSQL;</li>
+<li><strong>drf-spectacular и Swagger UI</strong> — спецификация OpenAPI и интерактивная документация;</li>
+<li><strong>MkDocs Material</strong> — документация лабораторных работ.</li>
+</ul>
+<p>Для учебных практических заданий 3.1 и 3.2 дополнительно предусмотрены самостоятельные приложения на SQLite, независимые от основной PostgreSQL-базы.</p>
+<h2 id="_3">Архитектура приложения</h2>
+<p>Я разделил серверную часть на слои, каждый из которых выполняет определённую задачу:</p>
+<div class="highlight"><pre><span></span><code>HTTP-клиент / Swagger UI
+         |
+         v
+Django URL -&gt; DRF Router / Djoser
+         |
+         v
+ViewSet / APIView -&gt; проверка прав
+         |
+         v
+Serializer -&gt; проверка и преобразование JSON
+         |
+         v
+Сервисная логика -&gt; транзакции, расчёты, ограничения
+         |
+         v
+Django ORM -&gt; PostgreSQL
+</code></pre></div>
+<p>В <code>agency/settings.py</code> находятся настройки Django, PostgreSQL и токенной авторизации, а в <code>agency/urls.py</code> — основные маршруты. Приложение <code>ad_agency</code> содержит модели данных, сериализаторы, обработчики запросов, расчёты и отчёты.</p>
+<table>
+<thead>
+<tr>
+<th>Файл</th>
+<th>Назначение</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ad_agency/models.py</code></td>
+<td>Десять предметных моделей, их поля, связи и ограничения</td>
+</tr>
+<tr>
+<td><code>ad_agency/serializers.py</code></td>
+<td>Проверка входящих данных, формирование JSON, вложенные объекты</td>
+</tr>
+<tr>
+<td><code>ad_agency/views.py</code></td>
+<td>CRUD-операции, оформление документов и отметка об оплате</td>
+</tr>
+<tr>
+<td><code>ad_agency/services.py</code></td>
+<td>Расчёт стоимости и межтабличные бизнес-проверки</td>
+</tr>
+<tr>
+<td><code>ad_agency/reports.py</code></td>
+<td>Пять запросов предметной области и квартальный отчёт</td>
+</tr>
+<tr>
+<td><code>ad_agency/permissions.py</code></td>
+<td>Проверка прав на чтение и изменение</td>
+</tr>
+<tr>
+<td><code>ad_agency/urls.py</code></td>
+<td>Маршруты API и отчётов</td>
+</tr>
+<tr>
+<td><code>ad_agency/report_schemas.py</code></td>
+<td>Описание структуры ответов аналитики для OpenAPI</td>
+</tr>
+<tr>
+<td><code>ad_agency/tests/test_agency.py</code></td>
+<td>Автоматические проверки основной лабораторной</td>
+</tr>
+<tr>
+<td><code>ad_agency/management/commands/seed_demo.py</code></td>
+<td>Демонстрационные данные</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_4">Модель данных</h2>
+<p>Модель из десяти таблиц была согласована с преподавателем до начала реализации.</p>
+<table>
+<thead>
+<tr>
+<th>Таблица</th>
+<th>Сведения</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>advertiser</code></td>
+<td>Рекламодатель</td>
+</tr>
+<tr>
+<td><code>employee</code></td>
+<td>Исполнитель и его контактные данные</td>
+</tr>
+<tr>
+<td><code>service_category</code></td>
+<td>Категория рекламных услуг</td>
+</tr>
+<tr>
+<td><code>advertising_service</code></td>
+<td>Услуга, единица измерения, текущая цена</td>
+</tr>
+<tr>
+<td><code>material</code></td>
+<td>Материал и единица измерения</td>
+</tr>
+<tr>
+<td><code>material_usage_norm</code></td>
+<td>Норма расхода материала на единицу услуги</td>
+</tr>
+<tr>
+<td><code>advertising_request</code></td>
+<td>Заявка и контактные данные на дату её оформления</td>
+</tr>
+<tr>
+<td><code>request_work</code></td>
+<td>Конкретная работа, исполнитель, количество и согласованная цена</td>
+</tr>
+<tr>
+<td><code>contract</code></td>
+<td>Договор по заявке</td>
+</tr>
+<tr>
+<td><code>payment_order</code></td>
+<td>Платёжное поручение, сумма и дата оплаты</td>
+</tr>
+</tbody>
+</table>
+<p><strong>ER-диаграмма согласованной базы данных:</strong></p>
+<p><img alt="ER-диаграмма рекламного агентства «Луч»" src="../screenshots/schema-approved.png" /></p>
+<p>Связи «один ко многим» представлены <code>ForeignKey</code>; например, один рекламодатель может иметь несколько заявок. Связи «один к одному» между заявкой и договором, а также между договором и платёжным поручением представлены <code>OneToOneField</code>. При этом договор и поручение могут отсутствовать у родительской записи.</p>
+<p>Связь между рекламными услугами и материалами является отношением «многие ко многим». Я реализовал её через <code>ManyToManyField</code> с промежуточной моделью <code>MaterialUsageNorm</code>, поскольку у связи имеется собственный атрибут — норма расхода. Первичный ключ этой таблицы составной: <code>(service_id, material_id)</code>. Для этого использован <code>CompositePrimaryKey</code> из Django 5.2. У остальных предметных таблиц названия первичных ключей совпадают с согласованной ER-диаграммой.</p>
+<p>Нормализация до третьей нормальной формы обеспечивается разделением справочников услуг, категорий и материалов, сохранением контактов в заявке и вынесением нормативов расхода в отдельную таблицу. В модели заданы внешние ключи, уникальные значения и проверки допустимых количеств и цен.</p>
+<h2 id="-">Основные операции и бизнес-правила</h2>
+<p>В приложении реализованы создание, чтение, изменение и удаление записей с учётом ограничений предметной области. Для работы с API необходима токенная авторизация. Просматривать данные могут зарегистрированные пользователи; операции изменения разрешены пользователям с признаком <code>is_staff</code>.</p>
+<p>Создание заказа включает выбор рекламодателя, оформление заявки с контактами, добавление работ с исполнителями и согласованными ценами. Договор заключается только по заявке, содержащей работы с положительной итоговой стоимостью. По договору оформляется не более одного платёжного поручения, а после подтверждения полной оплаты заказ считается выполненным.</p>
+<p>Денежные суммы вычисляются с использованием <code>Decimal</code>. Сначала стоимость <strong>каждой строки</strong> округляется до копеек по обычному арифметическому правилу, затем округлённые значения суммируются. Поэтому платёжное поручение и аналитические отчёты используют одинаковый порядок расчётов. Бесплатные работы могут входить в платный заказ, но по полностью бесплатной заявке договор не создаётся.</p>
+<p>После подписания договора состав работ, исполнители, количество и согласованные цены фиксируются. Для изменения условий создаётся новая заявка. При проверках используются транзакции <code>transaction.atomic()</code> и блокировки строк <code>select_for_update()</code>, чтобы связанные операции не противоречили друг другу при одновременных запросах.</p>
+<h2 id="rest-api">Реализованный REST API</h2>
+<p>Для каждой предметной сущности предусмотрены ресурсы API:</p>
+<table>
+<thead>
+<tr>
+<th>Ресурс</th>
+<th>URL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Рекламодатели</td>
+<td><code>/api/advertisers/</code></td>
+</tr>
+<tr>
+<td>Сотрудники</td>
+<td><code>/api/employees/</code></td>
+</tr>
+<tr>
+<td>Категории услуг</td>
+<td><code>/api/categories/</code></td>
+</tr>
+<tr>
+<td>Рекламные услуги</td>
+<td><code>/api/services/</code></td>
+</tr>
+<tr>
+<td>Материалы</td>
+<td><code>/api/materials/</code></td>
+</tr>
+<tr>
+<td>Нормы расхода</td>
+<td><code>/api/material-norms/</code></td>
+</tr>
+<tr>
+<td>Заявки</td>
+<td><code>/api/requests/</code></td>
+</tr>
+<tr>
+<td>Работы</td>
+<td><code>/api/works/</code></td>
+</tr>
+<tr>
+<td>Договоры</td>
+<td><code>/api/contracts/</code></td>
+</tr>
+<tr>
+<td>Платёжные поручения</td>
+<td><code>/api/payment-orders/</code></td>
+</tr>
+</tbody>
+</table>
+<p>Для коллекций доступны методы <code>GET</code> и <code>POST</code>; для отдельной записи — <code>GET</code>, <code>PUT</code>, <code>PATCH</code> и <code>DELETE</code> в рамках разрешённых предметной областью операций. Отметка о полной оплате выполняется отдельным действием <code>POST /api/payment-orders/{id}/mark-paid/</code>.</p>
+<p><strong>Вложенные объекты</strong> реализованы для обоих типов связей, указанных в задании. Запрос <code>GET /api/advertisers/{id}/</code> содержит заявки рекламодателя (1:N). Запрос <code>GET /api/services/{id}/</code> возвращает материалы услуги и нормы их расхода (M:N).</p>
+<p>На рисунке ниже показан результат запроса <code>GET /api/advertisers/1/</code>: в ответе с кодом <code>200 OK</code> рекламодатель содержит массив <code>requests</code> с двумя заявками и контактными данными, сохранёнными при оформлении.</p>
+<p><img alt="Вложенные заявки рекламодателя — связь один ко многим" src="../screenshots/advertiser-nested-requests.png" /></p>
+<p>Запрос <code>GET /api/services/1/</code> возвращает сведения об услуге, вложенный массив <code>materials</code> и нормы расхода <code>norms</code> с количеством материала на единицу услуги. Это подтверждает работу связи «многие ко многим» через промежуточную модель.</p>
+<p><img alt="Материалы рекламной услуги и нормативы расхода — связь многие ко многим" src="../screenshots/service-nested-materials.png" /></p>
+<p>Для регистрации и авторизации используется Djoser: <code>POST /auth/users/</code>, <code>POST /auth/token/login/</code>, <code>GET /auth/users/me/</code>, <code>POST /auth/token/logout/</code>. Авторизованные запросы передают заголовок <code>Authorization: Token &lt;токен&gt;</code>.</p>
+<h3 id="_5">Интерактивная документация</h3>
+<p>Swagger UI доступен по адресу <code>/api/docs/</code>, а схема OpenAPI — по <code>/api/schema/</code>. В Swagger можно просматривать структуру запросов и ответов, передавать токен авторизации и запускать запросы непосредственно из браузера.</p>
+<p><strong>Главная страница Swagger UI со списком CRUD-методов:</strong></p>
+<p><img alt="Интерактивная документация Swagger UI" src="../screenshots/swagger-overview.png" /></p>
+<p><strong>Окно токенной авторизации Swagger UI:</strong></p>
+<p><img alt="Авторизация запросов по токену в Swagger UI" src="../screenshots/swagger-authorize.png" /></p>
+<h2 id="no8">Аналитические запросы варианта №8</h2>
+<p>Я реализовал пять обязательных запросов и квартальный отчёт:</p>
+<table>
+<thead>
+<tr>
+<th>URL</th>
+<th>Результат</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/api/reports/completed-works/</code></td>
+<td>Выполненные работы: дата оплаты, рекламодатель, код услуги, исполнитель</td>
+</tr>
+<tr>
+<td><code>/api/reports/payment-orders/</code></td>
+<td>Поручения за период, услуги и статус оплаты</td>
+</tr>
+<tr>
+<td><code>/api/reports/services/</code></td>
+<td>Номенклатура услуг по категориям</td>
+</tr>
+<tr>
+<td><code>/api/reports/advertiser-requests/</code></td>
+<td>Заявки с заключёнными договорами за период</td>
+</tr>
+<tr>
+<td><code>/api/reports/employee-workload/</code></td>
+<td>Количество различных оплаченных заявок каждого сотрудника</td>
+</tr>
+<tr>
+<td><code>/api/reports/quarterly/</code></td>
+<td>Стоимость выполненных работ исполнителей за квартал</td>
+</tr>
+</tbody>
+</table>
+<p>Отбор оплаченных заказов производится по <code>payment_order.paid_at</code>, а поручений — по дате их выставления. Для подсчёта заявок сотрудников используется уникальный учёт идентификаторов заявок, чтобы несколько работ одного сотрудника не увеличивали их количество. Квартальный отчёт суммирует округлённые стоимости отдельных работ.</p>
+<p>Работу аналитических запросов я проверил через Swagger UI. Например, <code>GET /api/reports/payment-orders/</code> вернул два поручения с разными состояниями: <code>paid: true</code> для оплаченного и <code>paid: false</code> для неоплаченного. В ответе также указаны заказчик, перечень услуг, даты и сумма.</p>
+<p><img alt="Платёжные поручения и состояния оплаты в Swagger UI" src="../screenshots/report-payment-orders.png" /></p>
+<p>Отчёт за III квартал 2026 года в демонстрационных данных показывает общую стоимость <strong>2000,00 ₽</strong>, в том числе 1500,00 ₽ у первого исполнителя и 500,00 ₽ у второго. Неоплаченное поручение в результат не включается. При запросе <code>GET /api/reports/quarterly/?year=2026&amp;quarter=3</code> сервер вернул данные по двум исполнителям, включая их работы и рассчитанные суммы.</p>
+<p><img alt="Квартальный отчёт за III квартал 2026 года в Swagger UI" src="../screenshots/report-quarterly.png" /></p>
+<h2 id="31-django-orm">Практическая работа 3.1 — запросы Django ORM</h2>
+<p>Практическую работу 3.1 я выполнил в <code>practice_3_1/</code>. В <code>run_in_lab2.py</code> приведено создание шести автовладельцев, шести автомобилей и водительских удостоверений, заполнение отношений владения, а также пять фильтрующих и пять агрегирующих запросов из методички. Использованы <code>filter()</code>, <code>get()</code>, <code>related_name</code>, <code>aggregate()</code>, <code>annotate()</code>, <code>Count()</code>, <code>Min()</code>, <code>Max()</code>, <code>order_by()</code> и <code>distinct()</code>.</p>
+<p>Для работы с исходными моделями второй лабораторной предусмотрен режим интеграции с ЛР2. Отдельная копия автомобильных моделей в <code>cars_practice/models.py</code> позволяет выполнять эти запросы независимо, в учебной базе SQLite.</p>
+<p>Я применил миграции практики 3.1 и запустил <code>run_in_lab2.py</code> в автономном режиме. Скрипт вывел все десять заданных выборок: автомобили марки Toyota, владельцев по имени и цвету автомобиля, удостоверение по идентификатору владельца, периоды владения, минимальную и максимальную даты, количество машин по владельцам и маркам и сортировку владельцев по дате выдачи удостоверений.</p>
+<p><img alt="Результаты выполнения запросов Django ORM из практики 3.1" src="../screenshots/practice-3-1-orm.png" /></p>
+<h2 id="32-django-rest-framework">Практическая работа 3.2 — Django REST Framework</h2>
+<p>Практическую работу 3.2 я выполнил в <code>practice_3_2/</code>. Это самостоятельное REST API для учёта воинов, профессий и навыков. Модели расположены в <code>warriors/models.py</code>, сериализаторы — в <code>warriors/serializers.py</code>, обработчики запросов — в <code>warriors/views.py</code>, маршруты — в <code>practice_urls.py</code>.</p>
+<p>Для демонстрации разных способов создания API использованы <code>APIView</code>, стандартное обобщённое представление и <code>ModelViewSet</code>. Реализованы создание и получение навыков, получение воинов с вложенными профессиями и навыками, изменение данных воина и удаление. Поведение API проверяется тестами из <code>warriors/tests.py</code>. После применения миграций я выполнил команду <code>python practice_3_2/manage.py test warriors -v 2</code>: тест <code>test_crud_and_nested_relations</code> завершился успешно, итог — <code>Ran 1 test</code> и <code>OK</code>.</p>
+<p><img alt="Успешный тест CRUD и вложенных связей в практике 3.2" src="../screenshots/practice-3-2-tests.png" /></p>
+<h2 id="_6">Проверка основной лабораторной</h2>
+<p>В локальной среде Windows с PostgreSQL я создал и применил миграцию <code>ad_agency.0001_initial</code>. Проверка структуры БД подтвердила имена всех десяти предметных таблиц и первичных ключей, включая составной ключ таблицы норм расхода. <code>python manage.py check</code> завершилась без ошибок, а <code>makemigrations --check --dry-run</code> не обнаружила несохранённых изменений моделей.</p>
+<p>Автоматический набор проверок основной лабораторной завершился успешно: <strong>24 теста, результат <code>OK</code></strong>. Среди сценариев проверены авторизация через Djoser, вложенные связи 1:N и M:N, права доступа, ограничение цен и количеств, запрет изменения работ после подписания договора, расчёт стоимости и аналитические запросы.</p>
+<p><img alt="Автоматические тесты основного приложения рекламного агентства" src="../screenshots/lab3-main-tests.png" /></p>
+<p>Отдельно был выполнен HTTP smoke-тест через <code>scripts/smoke.ps1</code>: успешно прочитаны десять коллекций и шесть отчётов, проверены вложенные объекты, кодировка ответов UTF-8 и доступность Swagger. Сервер возвращает JSON с заголовком <code>Content-Type: application/json; charset=utf-8</code>.</p>
+<h2 id="_7">Вывод</h2>
+<p>В ходе лабораторной работы я реализовал серверную часть рекламного агентства «Луч» на Django REST Framework и PostgreSQL по согласованной модели из десяти таблиц. В приложении доступны операции учёта заявок, договоров и оплат, регистрация пользователей, вложенные отношения между сущностями и все аналитические запросы варианта №8. Для работы с API подготовлена интерактивная документация Swagger UI. В практических работах 3.1 и 3.2 рассмотрены запросы Django ORM и создание REST API разными способами. Работоспособность основной лабораторной подтверждена миграциями, автоматическими тестами и реальными HTTP-запросами.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "\u0421\u043a\u043e\u043f\u0438\u0440\u043e\u0432\u0430\u043d\u043e \u0432 \u0431\u0443\u0444\u0435\u0440", "clipboard.copy": "\u041a\u043e\u043f\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u0432 \u0431\u0443\u0444\u0435\u0440", "search.result.more.one": "\u0415\u0449\u0451 1 \u043d\u0430 \u044d\u0442\u043e\u0439 \u0441\u0442\u0440\u0430\u043d\u0438\u0446\u0435", "search.result.more.other": "\u0415\u0449\u0451 # \u043d\u0430 \u044d\u0442\u043e\u0439 \u0441\u0442\u0440\u0430\u043d\u0438\u0446\u0435", "search.result.none": "\u0421\u043e\u0432\u043f\u0430\u0434\u0435\u043d\u0438\u0439 \u043d\u0435 \u043d\u0430\u0439\u0434\u0435\u043d\u043e", "search.result.one": "\u041d\u0430\u0439\u0434\u0435\u043d\u043e 1 \u0441\u043e\u0432\u043f\u0430\u0434\u0435\u043d\u0438\u0435", "search.result.other": "\u041d\u0430\u0439\u0434\u0435\u043d\u043e \u0441\u043e\u0432\u043f\u0430\u0434\u0435\u043d\u0438\u0439: #", "search.result.placeholder": "\u041d\u0430\u0447\u043d\u0438\u0442\u0435 \u043f\u0435\u0447\u0430\u0442\u0430\u0442\u044c \u0434\u043b\u044f \u043f\u043e\u0438\u0441\u043a\u0430", "search.result.term.missing": "\u041e\u0442\u0441\u0443\u0442\u0441\u0442\u0432\u0443\u0435\u0442", "select.version": "\u0412\u044b\u0431\u0435\u0440\u0438\u0442\u0435 \u0432\u0435\u0440\u0441\u0438\u044e"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.a5f9d56c.min.js"></script>
+      
+    
+  </body>
+</html>
